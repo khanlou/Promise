@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80F91D5166C000C55D5A /* delay.swift */; };
 		3454F9D21D4FACD000985BBF /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 3454F9D11D4FACD000985BBF /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3454F9CE1D4FACD000985BBF /* Promise.framework */; };
 		3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9DD1D4FACD000985BBF /* PromiseTests.swift */; };
@@ -24,6 +25,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1AFF80F91D5166C000C55D5A /* delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delay.swift; sourceTree = "<group>"; };
 		3454F9CE1D4FACD000985BBF /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3454F9D11D4FACD000985BBF /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Promise.h; sourceTree = "<group>"; };
 		3454F9D31D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -85,6 +87,7 @@
 			children = (
 				3454F9DD1D4FACD000985BBF /* PromiseTests.swift */,
 				3454F9DF1D4FACD000985BBF /* Info.plist */,
+				1AFF80F91D5166C000C55D5A /* delay.swift */,
 			);
 			path = PromiseTests;
 			sourceTree = "<group>";
@@ -204,6 +207,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */,
 				3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

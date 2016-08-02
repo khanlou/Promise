@@ -9,13 +9,6 @@
 import XCTest
 @testable import Promise
 
-private func delay(duration: NSTimeInterval, block: () -> ()) {
-    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(duration*Double(NSEC_PER_SEC)))
-    dispatch_after(time, dispatch_get_main_queue(), {
-        block()
-    })
-}
-
 class PromiseTests: XCTestCase {
     func testThen() {
         
