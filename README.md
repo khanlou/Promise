@@ -31,3 +31,5 @@ The code sample above, when converted into promises, looks like this:
 	)}.onFailure({ error in
 		// hooray, a single failure block!
 	})
+
+This library isn't ready for production yet.  It doesn't have public declarations or a podspec yet, because I haven't used it in live app yet.
