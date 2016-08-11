@@ -237,18 +237,4 @@ final class Promise<Value> {
             self.callbacks.removeAll()
         }
     }
-    
-    static func all<T>(promises: [Promise<T>]) -> Promise<[T]> {
-        return Promise<[T]>(work: { fulfill, reject in
-            for promise in promises {
-                promise.then({ value in
-                    if promises.filter({ $0.isFulfilled }).count == promises.count {
-                        fulfill(promises.flatMap({ $0.value }))
-                    }
-                }).onFailure({ error in
-                    reject(error)
-                })
-            }
-        })
-    }
 }
