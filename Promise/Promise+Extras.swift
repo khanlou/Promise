@@ -46,11 +46,7 @@ extension Promise {
         return Promise<T>(work: { fulfill, reject in
             guard !promises.isEmpty else { fatalError() }
             for promise in promises {
-                promise.then({ value in
-                    fulfill(value)
-                }).onFailure({ error in
-                    reject(error)
-                })
+                promise.then(fulfill).onFailure(reject)
             }
         })
     }
@@ -74,14 +70,8 @@ extension Promise {
     
     func recover(recovery: (ErrorType) -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
-            self.then({ value in
-                fulfill(value)
-            }).onFailure({ error in
-                recovery(error).then({ value in
-                    fulfill(value)
-                }).onFailure({ error in
-                    reject(error)
-                })
+            self.then(fulfill).onFailure({ error in
+                recovery(error).then(fulfill).onFailure(reject)
             })
         })
     }
@@ -95,11 +85,7 @@ extension Promise {
                 return self.delay(delay).then({
                     return retry(count: count-1, delay: delay, generate: generate)
                 })
-            }).then({ value in
-                fulfill(value)
-            }).onFailure({ error in
-                reject(error)
-            })
+            }).then(fulfill).onFailure(reject)
         })
     }
     
