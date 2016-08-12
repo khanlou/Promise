@@ -43,4 +43,43 @@ class PromiseDelayTests: XCTestCase {
         XCTAssert(goodPromise.isRejected)
         XCTAssert(badPromise.isPending)
     }
+    
+    func testTimeoutFunctionSucceeds() {
+        weak var expectation = expectationWithDescription("`Promise.timeout` should succeed after the given time period has elapsed.")
+        
+        let promise = Promise<Int>(work: { fulfill, reject in
+            delay(0.01) {
+                fulfill(5)
+            }
+        }).addTimeout(1)
+        
+        XCTAssert(promise.isPending)
+        
+        promise.then({ _ in
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssert(promise.isFulfilled)
+    }
+
+    
+    func testTimeoutFunctionFails() {
+        weak var expectation = expectationWithDescription("`Promise.timeout` should succeed after the given time period has elapsed.")
+        
+        let promise = Promise<Int>(work: { fulfill, reject in
+            delay(1) {
+                fulfill(5)
+            }
+        }).addTimeout(0.5)
+        
+        XCTAssert(promise.isPending)
+        
+        promise.onFailure({ _ in
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssert(promise.isRejected)
+    }
 }

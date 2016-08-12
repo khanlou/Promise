@@ -55,4 +55,8 @@ extension Promise {
         })
     }
     
+    func addTimeout(timeout: NSTimeInterval) -> Promise<Value> {
+        let array = Array([self, Promise<Value>.timeout(timeout)])
+        return Promise.race(array)
+    }
 }
