@@ -135,7 +135,8 @@ final class Promise<Value> {
                 onFulfilled: { value in
                     fulfill(value)
                     onFulfilled(value)
-                }, onRejected: { error in
+                },
+                onRejected: { error in
                     reject(error)
                     onRejected(error)
                 }
