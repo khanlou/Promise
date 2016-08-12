@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */; };
 		1AE9F56F1D526F8A00185453 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */; };
 		1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80F91D5166C000C55D5A /* delay.swift */; };
 		1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */; };
@@ -27,6 +28,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseDelayTests.swift; sourceTree = "<group>"; };
 		1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Extras.swift"; sourceTree = "<group>"; };
 		1AFF80F91D5166C000C55D5A /* delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delay.swift; sourceTree = "<group>"; };
 		1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseAllTests.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			children = (
 				3454F9DD1D4FACD000985BBF /* PromiseTests.swift */,
 				1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */,
+				1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */,
 				3454F9DF1D4FACD000985BBF /* Info.plist */,
 				1AFF80F91D5166C000C55D5A /* delay.swift */,
 			);
@@ -217,6 +220,7 @@
 				1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */,
 				1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */,
 				3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */,
+				1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

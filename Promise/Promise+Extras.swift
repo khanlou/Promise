@@ -23,4 +23,14 @@ extension Promise {
             }
         })
     }
+
+    static func delay(delay: NSTimeInterval) -> Promise<()> {
+        return Promise<()>(work: { fulfill, reject in
+            let nanoseconds = Int64(delay*Double(NSEC_PER_SEC))
+            let time = dispatch_time(DISPATCH_TIME_NOW, nanoseconds)
+            dispatch_after(time, dispatch_get_main_queue(), {
+                fulfill(())
+            })
+        })
+    }
 }
