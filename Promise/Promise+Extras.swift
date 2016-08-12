@@ -33,4 +33,12 @@ extension Promise {
             })
         })
     }
+    
+    static func timeout(timeout: NSTimeInterval) -> Promise<()> {
+        return Promise<()>(work: { fulfill, reject in
+            delay(timeout).then({ _ in
+                reject(NSError(domain: "com.khanlou.Promise", code: -1111, userInfo: [ NSLocalizedDescriptionKey: "Timed out" ]))
+            })
+        })
+    }
 }
