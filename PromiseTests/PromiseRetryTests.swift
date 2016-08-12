@@ -28,4 +28,36 @@ class PromiseRetryTests: XCTestCase {
         XCTAssertEqual(promise.value, 8)
         XCTAssert(promise.isFulfilled)
     }
+    
+    func testRetryWithInstantSuccess() {
+        weak var expectation = expectationWithDescription("`Promise.retry` should never retry if it succeeds immediately.")
+        
+        var currentCount = 1
+        let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
+            if currentCount == 0 {
+                XCTFail()
+            }
+            currentCount -= 1
+            return Promise(value: 8)
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssertEqual(promise.value, 8)
+        XCTAssert(promise.isFulfilled)
+    }
+    
+    func testRetryWithNeverSuccess() {
+        weak var expectation = expectationWithDescription("`Promise.retry` should never retry if it succeeds immediately.")
+        
+        let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
+            return Promise(error: SimpleError())
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssert(promise.isRejected)
+    }
 }
