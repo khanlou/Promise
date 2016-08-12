@@ -65,4 +65,9 @@ extension Promise {
         }, { _ in
             onComplete()
         })
+    }
+    
+    func always(onComplete: Void -> Void) {
+        always(on: dispatch_get_main_queue(), onComplete)
+    }
 }
