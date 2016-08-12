@@ -114,16 +114,9 @@ final class Promise<Value> {
             self.addCallbacks(
                 on: queue,
                 onFulfilled: { value in
-                    let newPromise = onFulfilled(value)
-                    newPromise.then({ value in
-                        fulfill(value)
-                    }).onFailure({ error in
-                        reject(error)
-                    })
+                    onFulfilled(value).then(fulfill, reject)
                 },
-                onRejected: { error in
-                    reject(error)
-                }
+                onRejected: reject
             )
         })
     }
