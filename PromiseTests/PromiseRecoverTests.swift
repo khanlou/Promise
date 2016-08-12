@@ -31,4 +31,62 @@ class PromiseRecoverTests: XCTestCase {
         XCTAssertEqual(int, 5)
         XCTAssert(promise.isFulfilled)
     }
+    
+    func testRecoverInstant() {
+        weak var expectation = expectationWithDescription("`Promise.recover` should recover if the initial promise is rejected.")
+        
+        let promise = Promise<Int>(error: SimpleError()).recover({ error in
+            XCTAssert(error as? SimpleError == SimpleError())
+            return Promise(work: { (fulfill, reject) in
+                fulfill(5)
+            })
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        guard let int = promise.value else { XCTFail(); return }
+        XCTAssertEqual(int, 5)
+        XCTAssert(promise.isFulfilled)
+    }
+    
+    func testIgnoreRecover() {
+        weak var expectation = expectationWithDescription("`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
+        
+        let promise = Promise<Int>(work: { fulfill, reject in
+            delay(0.1) {
+                fulfill(2)
+            }
+        }).recover({ error in
+            XCTAssert(error as? SimpleError == SimpleError())
+            return Promise(work: { (fulfill, reject) in
+                fulfill(5)
+            })
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        guard let int = promise.value else { XCTFail(); return }
+        XCTAssertEqual(int, 2)
+        XCTAssert(promise.isFulfilled)
+    }
+    
+    func testIgnoreRecoverInstant() {
+        weak var expectation = expectationWithDescription("`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
+        
+        let promise = Promise(value: 2).recover({ error in
+            XCTAssert(error as? SimpleError == SimpleError())
+            return Promise(work: { (fulfill, reject) in
+                fulfill(5)
+            })
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        guard let int = promise.value else { XCTFail(); return }
+        XCTAssertEqual(int, 2)
+        XCTAssert(promise.isFulfilled)
+    }
 }
