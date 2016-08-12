@@ -11,10 +11,6 @@ import XCTest
 
 class PromiseRaceTests: XCTestCase {
     
-    func makeTimeoutError() -> NSError {
-        return NSError(domain: "com.khanlou.Promise", code: -1111, userInfo: [ NSLocalizedDescriptionKey: "Timed out" ])
-    }
-
     func testRace() {
         weak var expectation = expectationWithDescription("`Promise.race` should fulfill as soon as the first promise is fulfilled.")
         
@@ -51,7 +47,7 @@ class PromiseRaceTests: XCTestCase {
         
         let promise1 = Promise<Int>(work: { fulfill, reject in
             delay(0.05) {
-                reject(self.makeTimeoutError())
+                reject(SimpleError())
             }
         })
         let promise2 = Promise<()>.delay(0.1).then({ 2 })
@@ -86,7 +82,7 @@ class PromiseRaceTests: XCTestCase {
     func testInstantReject() {
         weak var expectation = expectationWithDescription("`Promise.race` should reject as soon as the first promise is reject.")
         
-        let promise1 = Promise<Int>(error: makeTimeoutError())
+        let promise1 = Promise<Int>(error: SimpleError())
         let promise2 = Promise<()>.delay(0.1).then({ 5 })
         
         let final = Promise<Int>.race([promise1, promise2])

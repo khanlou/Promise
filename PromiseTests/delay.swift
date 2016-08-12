@@ -15,3 +15,12 @@ internal func delay(duration: NSTimeInterval, block: () -> ()) {
     })
 }
 
+
+struct SimpleError: ErrorType, Equatable {
+    
+}
+
+
+func ==(lhs: SimpleError, rhs: SimpleError) -> Bool {
+    return true
+}

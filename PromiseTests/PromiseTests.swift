@@ -44,7 +44,7 @@ class PromiseTests: XCTestCase {
         weak var expectation = expectationWithDescription("Calling `reject` from the `work:` constructor should cause the Promise to be rejceted.")
         let promise = Promise<String>(work: { (fulfill, reject) in
             delay(0.05) {
-                reject(NSError(domain: "com.khanlou.pinky", code: 1, userInfo: nil))
+                reject(SimpleError())
             }
         }).then({ string in
             XCTFail()
@@ -91,7 +91,7 @@ class PromiseTests: XCTestCase {
             XCTFail()
         })
         
-        promise.reject(NSError(domain: "com.khanlou.pinky", code: 0, userInfo: nil))
+        promise.reject(SimpleError())
         
         delay(0.05) {
             expectation?.fulfill()
@@ -129,7 +129,7 @@ class PromiseTests: XCTestCase {
     func testRejected() {
         weak var expectation = expectationWithDescription("A Promise that is rejected should have its `onFailure` method called.")
         
-        let error = NSError(domain: "com.khanlou.pinky", code: 0, userInfo: nil)
+        let error = SimpleError()
         let promise = Promise<Int>()
         
         promise.onFailure({ _ in
@@ -139,7 +139,7 @@ class PromiseTests: XCTestCase {
         promise.reject(error)
         
         waitForExpectationsWithTimeout(1, handler: nil)
-        XCTAssertEqual(promise.error as? NSError, error)
+        XCTAssertEqual(promise.error as? SimpleError, error)
         XCTAssert(promise.isRejected)
     }
     
@@ -218,7 +218,7 @@ class PromiseTests: XCTestCase {
     
     func testDoubleReject() {
         let promise = Promise<String>()
-        promise.reject(NSError(domain: "com.khanlou.Pinky", code: 12, userInfo: nil))
+        promise.reject(SimpleError())
         promise.fulfill("incorrect")
         XCTAssert(promise.isRejected)
     }

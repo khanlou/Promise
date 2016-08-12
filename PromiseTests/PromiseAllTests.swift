@@ -71,7 +71,7 @@ class PromiseAllTests: XCTestCase {
         })
         let promise2 = Promise<Int>(work: { fulfill, reject in
             delay(0.05) {
-                reject(NSError(domain: "com.khanlou.pinky", code: 1, userInfo: nil))
+                reject(SimpleError())
             }
         })
         
@@ -108,7 +108,7 @@ class PromiseAllTests: XCTestCase {
         })
         let promise2 = Promise<Int>(work: { fulfill, reject in
             delay(0.1) {
-                reject(NSError(domain: "com.khanlou.pinky", code: 1, userInfo: nil))
+                reject(SimpleError())
             }
         })
         
