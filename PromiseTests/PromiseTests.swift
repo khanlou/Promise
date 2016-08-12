@@ -216,10 +216,24 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual(promise.value, "correct")
     }
     
-    func testDoubleReject() {
+    func testRejectThenResolve() {
         let promise = Promise<String>()
         promise.reject(SimpleError())
         promise.fulfill("incorrect")
         XCTAssert(promise.isRejected)
+    }
+
+    func testDoubleReject() {
+        let promise = Promise<String>()
+        promise.reject(SimpleError())
+        promise.reject(SimpleError())
+        XCTAssert(promise.isRejected)
+    }
+    
+    func testResolveThenReject() {
+        let promise = Promise<String>()
+        promise.fulfill("correct")
+        promise.reject(SimpleError())
+        XCTAssertEqual(promise.value, "correct")
     }
 }
