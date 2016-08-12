@@ -72,10 +72,10 @@ enum State<Value>: CustomStringConvertible {
     
     var description: String {
         switch self {
-        case .Fulfilled:
-            return "Fulfilled"
-        case .Rejected:
-            return "Rejected"
+        case .Fulfilled(let value):
+            return "Fulfilled (\(value))"
+        case .Rejected(let error):
+            return "Rejected (\(error))"
         case .Pending:
             return "Pending"
         }
