@@ -70,4 +70,19 @@ extension Promise {
     func always(onComplete: Void -> Void) -> Promise<Value> {
         return always(on: dispatch_get_main_queue(), onComplete)
     }
+
+    
+    func recover(recovery: (ErrorType) -> Promise<Value>) -> Promise<Value> {
+        return Promise(work: { fulfill, reject in
+            self.then({ value in
+                fulfill(value)
+            }).onFailure({ error in
+                recovery(error).then({ value in
+                    fulfill(value)
+                }).onFailure({ error in
+                    reject(error)
+                })
+            })
+        })
+    }
 }
