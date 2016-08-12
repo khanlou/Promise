@@ -58,4 +58,11 @@ extension Promise {
     func addTimeout(timeout: NSTimeInterval) -> Promise<Value> {
         return Promise.race(Array([self, Promise<Value>.timeout(timeout)]))
     }
+    
+    func always(on queue: dispatch_queue_t, _ onComplete: Void -> Void) {
+        then(on: queue, { _ in
+            onComplete()
+        }, { _ in
+            onComplete()
+        })
 }
