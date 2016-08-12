@@ -48,8 +48,8 @@ extension Promise {
             for promise in promises {
                 promise.then({ value in
                     fulfill(value)
-                    }, { error in
-                        reject(error)
+                }).onFailure({ error in
+                    reject(error)
                 })
             }
         })
