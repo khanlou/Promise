@@ -168,8 +168,9 @@ class PromiseTests: XCTestCase {
             }
         }).then({ value in
             return Promise<Int>(work: { fulfill, reject in
-                usleep(5000)
-                fulfill(value.characters.count)
+                delay(0.05) {
+                    fulfill(value.characters.count)
+                }
             })
         }).then({ value in
             XCTAssertEqual(value, 5)
