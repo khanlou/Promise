@@ -104,14 +104,7 @@ final class Promise<Value> {
     convenience init(queue: dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), work: (fulfill: (Value) -> (), reject: (ErrorType) -> () ) -> ()) {
         self.init()
         dispatch_async(queue, {
-            work(
-                fulfill: { value in
-                    self.updateState(.Fulfilled(value: value))
-                },
-                reject: { error in
-                    self.updateState(.Rejected(error: error))
-                }
-            )
+            work(fulfill: self.fulfill, reject: self.reject)
         })
     }
     
