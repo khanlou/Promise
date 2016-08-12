@@ -59,15 +59,15 @@ extension Promise {
         return Promise.race(Array([self, Promise<Value>.timeout(timeout)]))
     }
     
-    func always(on queue: dispatch_queue_t, _ onComplete: Void -> Void) {
-        then(on: queue, { _ in
+    func always(on queue: dispatch_queue_t, _ onComplete: Void -> Void) -> Promise<Value> {
+        return then(on: queue, { _ in
             onComplete()
         }, { _ in
             onComplete()
         })
     }
     
-    func always(onComplete: Void -> Void) {
-        always(on: dispatch_get_main_queue(), onComplete)
+    func always(onComplete: Void -> Void) -> Promise<Value> {
+        return always(on: dispatch_get_main_queue(), onComplete)
     }
 }
