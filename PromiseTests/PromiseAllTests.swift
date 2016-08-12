@@ -61,6 +61,20 @@ class PromiseAllTests: XCTestCase {
         XCTAssert(final.isFulfilled)
     }
     
+    func testAllWithEmptyArray() {
+        weak var expectation = expectationWithDescription("`Promise.all` should wait until multiple promises are fulfilled before returning.")
+        
+        
+        let final: Promise<[Int]> = Promise<Int>.all([])
+        final.always({
+            expectation?.fulfill()
+        })
+        waitForExpectationsWithTimeout(10, handler: nil)
+        guard let array = final.value else { XCTFail(); return }
+        XCTAssertEqual(array, [])
+        XCTAssert(final.isFulfilled)
+    }
+    
     func testAllWithRejectionHappeningFirst() {
         weak var expectation = expectationWithDescription("`Promise.all` should wait until multiple promises are fulfilled before returning.")
         
