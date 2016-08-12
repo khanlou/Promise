@@ -85,4 +85,22 @@ extension Promise {
             })
         })
     }
+    
+    static func retry<T>(count count: Int, delay: NSTimeInterval, generate: () -> Promise<T>) -> Promise<T> {
+        if count <= 0 {
+            return generate()
+        }
+        return Promise<T>(work: { fulfill, reject in
+            generate().recover({ error in
+                return self.delay(delay).then({
+                    return retry(count: count-1, delay: delay, generate: generate)
+                })
+            }).then({ value in
+                fulfill(value)
+            }).onFailure({ error in
+                reject(error)
+            })
+        })
+    }
+    
 }
