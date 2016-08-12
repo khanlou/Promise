@@ -12,7 +12,7 @@ import XCTest
 class PromiseRaceTests: XCTestCase {
 
     func testRace() {
-        weak var expectation = expectationWithDescription("`Promise.race` should wait until multiple promises are fulfilled before returning.")
+        weak var expectation = expectationWithDescription("`Promise.race` should fulfill as soon as the first promise is fulfilled.")
         
         let promise1 = Promise<Int>(work: { fulfill, reject in
             delay(0.1) {
@@ -41,9 +41,9 @@ class PromiseRaceTests: XCTestCase {
         XCTAssertEqual(int, 2)
         XCTAssert(final.isFulfilled)
     }
-
+    
     func testRaceFailure() {
-        weak var expectation = expectationWithDescription("`Promise.race` should wait until multiple promises are fulfilled before returning.")
+        weak var expectation = expectationWithDescription("`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(work: { fulfill, reject in
             delay(0.05) {
