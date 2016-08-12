@@ -45,4 +45,30 @@ class PromiseAlwaysTests: XCTestCase {
         XCTAssert(promise.isRejected)
     }
     
+    func testAlwaysInstantFulfill() {
+        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is rejected.")
+        
+        let promise = Promise(value: 5)
+        
+        promise.always({ _ in
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssert(promise.isFulfilled)
+    }
+    
+    func testAlwaysInstantReject() {
+        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is rejected.")
+        
+        let promise = Promise<Int>(error: SimpleError())
+        
+        promise.always({ _ in
+            expectation?.fulfill()
+        })
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+        XCTAssert(promise.isRejected)
+    }
+
 }
