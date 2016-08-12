@@ -41,4 +41,18 @@ extension Promise {
             })
         })
     }
+
+    static func race<T>(promises: [Promise<T>]) -> Promise<T> {
+        return Promise<T>(work: { fulfill, reject in
+            guard !promises.isEmpty else { fatalError() }
+            for promise in promises {
+                promise.then({ value in
+                    fulfill(value)
+                    }, { error in
+                        reject(error)
+                })
+            }
+        })
+    }
+    
 }
