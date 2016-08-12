@@ -46,7 +46,7 @@ extension Promise {
         return Promise<T>(work: { fulfill, reject in
             guard !promises.isEmpty else { fatalError() }
             for promise in promises {
-                promise.then(fulfill).onFailure(reject)
+                promise.then(fulfill, reject)
             }
         })
     }
@@ -71,7 +71,7 @@ extension Promise {
     func recover(recovery: (ErrorType) -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
             self.then(fulfill).onFailure({ error in
-                recovery(error).then(fulfill).onFailure(reject)
+                recovery(error).then(fulfill, reject)
             })
         })
     }
