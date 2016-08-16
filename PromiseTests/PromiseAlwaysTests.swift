@@ -12,7 +12,7 @@ import XCTest
 class PromiseAlwaysTests: XCTestCase {
     
     func testAlways() {
-        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is fulfilled.")
+        weak var expectation = self.expectation(description: "`Promise.always` should always fire when the promise is fulfilled.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(0.5) {
@@ -24,12 +24,12 @@ class PromiseAlwaysTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
     }
     
     func testAlwaysRejects() {
-        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is rejected.")
+        weak var expectation = self.expectation(description: "`Promise.always` should always fire when the promise is rejected.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(0.5) {
@@ -41,12 +41,12 @@ class PromiseAlwaysTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
     
     func testAlwaysInstantFulfill() {
-        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is rejected.")
+        weak var expectation = self.expectation(description: "`Promise.always` should always fire when the promise is rejected.")
         
         let promise = Promise(value: 5)
         
@@ -54,12 +54,12 @@ class PromiseAlwaysTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
     }
     
     func testAlwaysInstantReject() {
-        weak var expectation = expectationWithDescription("`Promise.always` should always fire when the promise is rejected.")
+        weak var expectation = self.expectation(description: "`Promise.always` should always fire when the promise is rejected.")
         
         let promise = Promise<Int>(error: SimpleError())
         
@@ -67,7 +67,7 @@ class PromiseAlwaysTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
 

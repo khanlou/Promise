@@ -12,7 +12,7 @@ import XCTest
 class PromiseRaceTests: XCTestCase {
     
     func testRace() {
-        weak var expectation = expectationWithDescription("`Promise.race` should fulfill as soon as the first promise is fulfilled.")
+        weak var expectation = self.expectation(description: "`Promise.race` should fulfill as soon as the first promise is fulfilled.")
         
         let promise1 = Promise<Int>(work: { fulfill, reject in
             delay(0.1) {
@@ -36,14 +36,14 @@ class PromiseRaceTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         guard let int = final.value else { XCTFail(); return }
         XCTAssertEqual(int, 2)
         XCTAssert(final.isFulfilled)
     }
     
     func testRaceFailure() {
-        weak var expectation = expectationWithDescription("`Promise.race` should reject as soon as the first promise is reject.")
+        weak var expectation = self.expectation(description: "`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(work: { fulfill, reject in
             delay(0.05) {
@@ -58,12 +58,12 @@ class PromiseRaceTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(final.isRejected)
     }
     
     func testInstantResolve() {
-        weak var expectation = expectationWithDescription("`Promise.race` should reject as soon as the first promise is reject.")
+        weak var expectation = self.expectation(description: "`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(value: 1)
         let promise2 = Promise<()>.delay(0.1).then({ 5 })
@@ -74,13 +74,13 @@ class PromiseRaceTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(final.isFulfilled)
         XCTAssertEqual(final.value, 1)
     }
     
     func testInstantReject() {
-        weak var expectation = expectationWithDescription("`Promise.race` should reject as soon as the first promise is reject.")
+        weak var expectation = self.expectation(description: "`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(error: SimpleError())
         let promise2 = Promise<()>.delay(0.1).then({ 5 })
@@ -91,7 +91,7 @@ class PromiseRaceTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(final.isRejected)
     }
 

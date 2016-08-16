@@ -8,15 +8,15 @@
 
 import XCTest
 
-internal func delay(duration: NSTimeInterval, block: () -> ()) {
-    let time = dispatch_time(DISPATCH_TIME_NOW, Int64(duration*Double(NSEC_PER_SEC)))
-    dispatch_after(time, dispatch_get_main_queue(), {
+internal func delay(_ duration: TimeInterval, block: @escaping () -> ()) {
+    let time = DispatchTime.now() + Double(Int64(duration*Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+    DispatchQueue.main.asyncAfter(deadline: time, execute: {
         block()
     })
 }
 
 
-struct SimpleError: ErrorType, Equatable {
+struct SimpleError: Error, Equatable {
     
 }
 

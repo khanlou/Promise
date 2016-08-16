@@ -9,30 +9,44 @@
 import Foundation
 
 struct Callback<Value> {
-    let onFulfilled: (Value -> ())
-    let onRejected: (ErrorType -> ())
-    let queue: dispatch_queue_t
+    let onFulfilled: (Value) -> Void
+    let onRejected: (Error) -> Void
+    let queue: DispatchQueue
     
-    func callFulfill(value: Value) {
-        dispatch_async(queue, {
+    func callFulfill(_ value: Value) {
+        queue.async(execute: {
             self.onFulfilled(value)
         })
     }
     
-    func callReject(error: ErrorType) {
-        dispatch_async(queue, {
+    func callReject(_ error: Error) {
+        queue.async(execute: {
             self.onRejected(error)
         })
     }
 }
 
-enum State<Value>: CustomStringConvertible {
-    case Pending
-    case Fulfilled(value: Value)
-    case Rejected(error: ErrorType)
-    
+enum State<Value> {
+
+    /// The promise has not completed yet.
+    /// Will transition to either the `fulfilled` or `rejected` state.
+    case pending
+
+    /// The promise now has a value.
+    /// Will not transition to any other state.
+    case fulfilled(value: Value)
+
+    /// The promise failed with the included error.
+    /// Will not transition to any other state.
+    case rejected(error: Error)
+
+}
+
+// Convenience methods
+extension State {
+
     var isPending: Bool {
-        if case .Pending = self {
+        if case .pending = self {
             return true
         } else {
             return false
@@ -40,7 +54,7 @@ enum State<Value>: CustomStringConvertible {
     }
     
     var isFulfilled: Bool {
-        if case .Fulfilled = self {
+        if case .fulfilled = self {
             return true
         } else {
             return false
@@ -48,7 +62,7 @@ enum State<Value>: CustomStringConvertible {
     }
     
     var isRejected: Bool {
-        if case .Rejected = self {
+        if case .rejected = self {
             return true
         } else {
             return false
@@ -56,27 +70,28 @@ enum State<Value>: CustomStringConvertible {
     }
     
     var value: Value? {
-        if case let .Fulfilled(value) = self {
+        if case let .fulfilled(value) = self {
             return value
         }
         return nil
     }
     
-    var error: ErrorType? {
-        if case let .Rejected(error) = self {
+    var error: Error? {
+        if case let .rejected(error) = self {
             return error
         }
         return nil
     }
+}
 
-    
+extension State: CustomStringConvertible {
     var description: String {
         switch self {
-        case .Fulfilled(let value):
+        case .fulfilled(let value):
             return "Fulfilled (\(value))"
-        case .Rejected(let error):
+        case .rejected(let error):
             return "Rejected (\(error))"
-        case .Pending:
+        case .pending:
             return "Pending"
         }
     }
@@ -86,30 +101,31 @@ enum State<Value>: CustomStringConvertible {
 final class Promise<Value> {
     
     private var state: State<Value>
-    private let lockQueue = dispatch_queue_create("lock_queue", DISPATCH_QUEUE_SERIAL)
+    private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
     private var callbacks: [Callback<Value>] = []
     
     init() {
-        state = .Pending
+        state = .pending
     }
     
     init(value: Value) {
-        state = .Fulfilled(value: value)
+        state = .fulfilled(value: value)
     }
     
-    init(error: ErrorType) {
-        state = .Rejected(error: error)
+    init(error: Error) {
+        state = .rejected(error: error)
     }
     
-    convenience init(queue: dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), work: (fulfill: (Value) -> (), reject: (ErrorType) -> () ) -> ()) {
+    convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) -> ()) {
         self.init()
-        dispatch_async(queue, {
-            work(fulfill: self.fulfill, reject: self.reject)
-        })
+        queue.async {
+            work(self.fulfill, self.reject)
+        }
     }
-    
-    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> Promise<NewValue>)) -> Promise<NewValue> {
-        //this one is flatmap
+
+    /// - note: This one is "flatMap"
+    @discardableResult
+    func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> Promise<NewValue>) -> Promise<NewValue> {
         return Promise<NewValue>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -121,14 +137,16 @@ final class Promise<Value> {
         })
     }
     
-    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> NewValue)) -> Promise<NewValue> {
-        //this one is map
+    /// - note: This one is "map"
+    @discardableResult
+    func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> NewValue) -> Promise<NewValue> {
         return then(on: queue, { (value) -> Promise<NewValue> in
             return Promise<NewValue>(value: onFulfilled(value))
         })
     }
     
-    func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void), _ onRejected: ErrorType -> Void) -> Promise<Value> {
+    @discardableResult
+    func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> Void, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
         return Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -143,25 +161,27 @@ final class Promise<Value> {
             )
         })
     }
-    
-    func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void)) -> Promise<Value> {
+
+    @discardableResult
+    func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> Void) -> Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
-    func onFailure(on queue: dispatch_queue_t, _ onRejected: ErrorType -> Void) -> Promise<Value> {
+    func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
-    func onFailure(onRejected: ErrorType -> Void) -> Promise<Value> {
-        return then(on: dispatch_get_main_queue(), { _ in }, onRejected)
+    @discardableResult
+    func onFailure(_ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
+        return then(on: DispatchQueue.main, { _ in }, onRejected)
     }
     
-    func reject(error: ErrorType) {
-        updateState(.Rejected(error: error))
+    func reject(_ error: Error) {
+        updateState(.rejected(error: error))
     }
     
-    func fulfill(value: Value) {
-        updateState(.Fulfilled(value: value))
+    func fulfill(_ value: Value) {
+        updateState(.fulfilled(value: value))
     }
     
     var isPending: Bool {
@@ -178,44 +198,44 @@ final class Promise<Value> {
     
     var value: Value? {
         var result: Value?
-        dispatch_sync(lockQueue, {
+        lockQueue.sync {
             result = self.state.value
-        })
+        }
         return result
     }
     
-    var error: ErrorType? {
-        var result: ErrorType?
-        dispatch_sync(lockQueue, {
+    var error: Error? {
+        var result: Error?
+        lockQueue.sync {
             result = self.state.error
-        })
+        }
         return result
     }
     
-    private func updateState(state: State<Value>) {
+    private func updateState(_ state: State<Value>) {
         guard self.isPending else { return }
-        dispatch_sync(lockQueue, {
+        lockQueue.sync(execute: {
             self.state = state
         })
         fireCallbacksIfCompleted()
     }
     
-    private func addCallbacks(on queue: dispatch_queue_t, onFulfilled: (Value -> Void), onRejected: ErrorType -> Void) {
+    private func addCallbacks(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> Void, onRejected: @escaping (Error) -> Void) {
         let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, queue: queue)
-        dispatch_async(lockQueue) {
+        lockQueue.async {
             self.callbacks.append(callback)
         }
         fireCallbacksIfCompleted()
     }
     
     private func fireCallbacksIfCompleted() {
-        dispatch_async(lockQueue) {
+        lockQueue.async {
             guard !self.state.isPending else { return }
             self.callbacks.forEach { callback in
                 switch self.state {
-                case let .Fulfilled(value):
+                case let .fulfilled(value):
                     callback.callFulfill(value)
-                case let .Rejected(error):
+                case let .rejected(error):
                     callback.callReject(error)
                 default:
                     break
