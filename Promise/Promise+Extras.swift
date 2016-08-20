@@ -89,4 +89,16 @@ extension Promise {
         })
     }
     
+    
+    static func zip<T, U>(first: Promise<T>, second: Promise<U>) -> Promise<(T, U)> {
+        return Promise<(T, U)>(work: { fulfill, reject in
+            let resolver: (Any) -> () = { _ in
+                if let firstValue = first.value, secondValue = second.value {
+                    fulfill((firstValue, secondValue))
+                }
+            }
+            first.then(resolver, reject)
+            second.then(resolver, reject)
+        })
+    }
 }
