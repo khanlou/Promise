@@ -83,32 +83,32 @@ enum State<Value>: CustomStringConvertible {
 }
 
 
-final class Promise<Value> {
+public final class Promise<Value> {
     
     private var state: State<Value>
     private let lockQueue = dispatch_queue_create("lock_queue", DISPATCH_QUEUE_SERIAL)
     private var callbacks: [Callback<Value>] = []
     
-    init() {
+    public init() {
         state = .Pending
     }
     
-    init(value: Value) {
+    public init(value: Value) {
         state = .Fulfilled(value: value)
     }
     
-    init(error: ErrorType) {
+    public init(error: ErrorType) {
         state = .Rejected(error: error)
     }
     
-    convenience init(queue: dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), work: (fulfill: (Value) -> (), reject: (ErrorType) -> () ) -> ()) {
+    public convenience init(queue: dispatch_queue_t = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), work: (fulfill: (Value) -> (), reject: (ErrorType) -> () ) -> ()) {
         self.init()
         dispatch_async(queue, {
             work(fulfill: self.fulfill, reject: self.reject)
         })
     }
     
-    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> Promise<NewValue>)) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> Promise<NewValue>)) -> Promise<NewValue> {
         //this one is flatmap
         return Promise<NewValue>(work: { fulfill, reject in
             self.addCallbacks(
@@ -121,14 +121,14 @@ final class Promise<Value> {
         })
     }
     
-    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> NewValue)) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> NewValue)) -> Promise<NewValue> {
         //this one is map
         return then(on: queue, { (value) -> Promise<NewValue> in
             return Promise<NewValue>(value: onFulfilled(value))
         })
     }
     
-    func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void), _ onRejected: ErrorType -> Void) -> Promise<Value> {
+    public func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void), _ onRejected: ErrorType -> Void) -> Promise<Value> {
         return Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -144,39 +144,39 @@ final class Promise<Value> {
         })
     }
     
-    func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void)) -> Promise<Value> {
+    public func then(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: (Value -> Void)) -> Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
-    func onFailure(on queue: dispatch_queue_t, _ onRejected: ErrorType -> Void) -> Promise<Value> {
+    public func onFailure(on queue: dispatch_queue_t, _ onRejected: ErrorType -> Void) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
-    func onFailure(onRejected: ErrorType -> Void) -> Promise<Value> {
+    public func onFailure(onRejected: ErrorType -> Void) -> Promise<Value> {
         return then(on: dispatch_get_main_queue(), { _ in }, onRejected)
     }
     
-    func reject(error: ErrorType) {
+    public func reject(error: ErrorType) {
         updateState(.Rejected(error: error))
     }
     
-    func fulfill(value: Value) {
+    public func fulfill(value: Value) {
         updateState(.Fulfilled(value: value))
     }
     
-    var isPending: Bool {
+    public var isPending: Bool {
         return !isFulfilled && !isRejected
     }
     
-    var isFulfilled: Bool {
+    public var isFulfilled: Bool {
         return value != nil
     }
     
-    var isRejected: Bool {
+    public var isRejected: Bool {
         return error != nil
     }
     
-    var value: Value? {
+    public var value: Value? {
         var result: Value?
         dispatch_sync(lockQueue, {
             result = self.state.value
@@ -184,7 +184,7 @@ final class Promise<Value> {
         return result
     }
     
-    var error: ErrorType? {
+    public var error: ErrorType? {
         var result: ErrorType?
         dispatch_sync(lockQueue, {
             result = self.state.error
