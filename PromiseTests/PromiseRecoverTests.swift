@@ -11,7 +11,7 @@ import XCTest
 
 class PromiseRecoverTests: XCTestCase {
     func testRecover() {
-        weak var expectation = expectationWithDescription("`Promise.recover` should recover from errors.")
+        weak var expectation = self.expectation(description: "`Promise.recover` should recover from errors.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(0.1) {
@@ -26,14 +26,14 @@ class PromiseRecoverTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         guard let int = promise.value else { XCTFail(); return }
         XCTAssertEqual(int, 5)
         XCTAssert(promise.isFulfilled)
     }
     
     func testRecoverInstant() {
-        weak var expectation = expectationWithDescription("`Promise.recover` should recover if the initial promise is rejected.")
+        weak var expectation = self.expectation(description: "`Promise.recover` should recover if the initial promise is rejected.")
         
         let promise = Promise<Int>(error: SimpleError()).recover({ error in
             XCTAssert(error as? SimpleError == SimpleError())
@@ -44,14 +44,14 @@ class PromiseRecoverTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         guard let int = promise.value else { XCTFail(); return }
         XCTAssertEqual(int, 5)
         XCTAssert(promise.isFulfilled)
     }
     
     func testIgnoreRecover() {
-        weak var expectation = expectationWithDescription("`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
+        weak var expectation = self.expectation(description: "`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(0.1) {
@@ -66,14 +66,14 @@ class PromiseRecoverTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         guard let int = promise.value else { XCTFail(); return }
         XCTAssertEqual(int, 2)
         XCTAssert(promise.isFulfilled)
     }
     
     func testIgnoreRecoverInstant() {
-        weak var expectation = expectationWithDescription("`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
+        weak var expectation = self.expectation(description: "`Promise.recover` shouldn't recover if the initial promise is fulfilled.")
         
         let promise = Promise(value: 2).recover({ error in
             XCTAssert(error as? SimpleError == SimpleError())
@@ -84,7 +84,7 @@ class PromiseRecoverTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         guard let int = promise.value else { XCTFail(); return }
         XCTAssertEqual(int, 2)
         XCTAssert(promise.isFulfilled)

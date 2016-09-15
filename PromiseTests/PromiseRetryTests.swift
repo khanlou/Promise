@@ -11,7 +11,7 @@ import XCTest
 
 class PromiseRetryTests: XCTestCase {
     func testRetry() {
-        weak var expectation = expectationWithDescription("`Promise.retry` should retry and eventually succeed.")
+        weak var expectation = self.expectation(description: "`Promise.retry` should retry and eventually succeed.")
         
         var currentCount = 3
         let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
@@ -24,13 +24,13 @@ class PromiseRetryTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.value, 8)
         XCTAssert(promise.isFulfilled)
     }
     
     func testRetryWithInstantSuccess() {
-        weak var expectation = expectationWithDescription("`Promise.retry` should never retry if it succeeds immediately.")
+        weak var expectation = self.expectation(description: "`Promise.retry` should never retry if it succeeds immediately.")
         
         var currentCount = 1
         let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
@@ -43,13 +43,13 @@ class PromiseRetryTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.value, 8)
         XCTAssert(promise.isFulfilled)
     }
     
     func testRetryWithNeverSuccess() {
-        weak var expectation = expectationWithDescription("`Promise.retry` should never retry if it succeeds immediately.")
+        weak var expectation = self.expectation(description: "`Promise.retry` should never retry if it succeeds immediately.")
         
         let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
             return Promise(error: SimpleError())
@@ -57,7 +57,7 @@ class PromiseRetryTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
 }

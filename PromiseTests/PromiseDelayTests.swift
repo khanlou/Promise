@@ -11,7 +11,7 @@ import XCTest
 
 class PromiseDelayTests: XCTestCase {
     func testDelay() {
-        weak var expectation = expectationWithDescription("`Promise.delay` should succeed after the given time period has elapsed.")
+        weak var expectation = self.expectation(description: "`Promise.delay` should succeed after the given time period has elapsed.")
         
         let goodPromise = Promise<()>.delay(0.2)
         let badPromise = Promise<()>.delay(1.1)
@@ -22,13 +22,13 @@ class PromiseDelayTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(goodPromise.isFulfilled)
         XCTAssert(badPromise.isPending)
     }
     
     func testTimeoutPromise() {
-        weak var expectation = expectationWithDescription("`Promise.timeout` should succeed after the given time period has elapsed.")
+        weak var expectation = self.expectation(description: "`Promise.timeout` should succeed after the given time period has elapsed.")
         
         let goodPromise: Promise<()> = Promise<()>.timeout(0.2)
         let badPromise: Promise<()> = Promise<()>.timeout(1.1)
@@ -39,13 +39,13 @@ class PromiseDelayTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(goodPromise.isRejected)
         XCTAssert(badPromise.isPending)
     }
     
     func testTimeoutFunctionSucceeds() {
-        weak var expectation = expectationWithDescription("`Promise.timeout` should succeed after the given time period has elapsed.")
+        weak var expectation = self.expectation(description: "`Promise.timeout` should succeed after the given time period has elapsed.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(0.01) {
@@ -59,13 +59,13 @@ class PromiseDelayTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
     }
 
     
     func testTimeoutFunctionFails() {
-        weak var expectation = expectationWithDescription("`Promise.timeout` should succeed after the given time period has elapsed.")
+        weak var expectation = self.expectation(description: "`Promise.timeout` should succeed after the given time period has elapsed.")
         
         let promise = Promise<Int>(work: { fulfill, reject in
             delay(1) {
@@ -79,7 +79,7 @@ class PromiseDelayTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
 }

@@ -10,9 +10,9 @@ import XCTest
 @testable import Promise
 
 class PromiseTests: XCTestCase {
+
     func testThen() {
-        
-        weak var expectation = expectationWithDescription("The then function should be called twice.")
+        weak var expectation = self.expectation(description: "The then function should be called twice.")
         var count = 0
         
         let promise = Promise(value: 5).then({ _ in
@@ -22,13 +22,13 @@ class PromiseTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(count == 2)
         XCTAssert(promise.isFulfilled)
     }
     
     func testAsync() {
-        weak var expectation = expectationWithDescription("The `work:` based constructor of Promise should work correctly.")
+        weak var expectation = self.expectation(description: "The `work:` based constructor of Promise should work correctly.")
         Promise<String>(work: { (fulfill, reject) in
             delay(0.05) {
                 fulfill("hey")
@@ -37,11 +37,11 @@ class PromiseTests: XCTestCase {
             XCTAssertEqual(string, "hey")
             expectation?.fulfill()
         })
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
     
     func testAsyncRejection() {
-        weak var expectation = expectationWithDescription("Calling `reject` from the `work:` constructor should cause the Promise to be rejceted.")
+        weak var expectation = self.expectation(description: "Calling `reject` from the `work:` constructor should cause the Promise to be rejceted.")
         let promise = Promise<String>(work: { (fulfill, reject) in
             delay(0.05) {
                 reject(SimpleError())
@@ -57,13 +57,13 @@ class PromiseTests: XCTestCase {
         }).onFailure({ error in
             expectation?.fulfill()
         })
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertNotNil(promise.error)
         XCTAssert(promise.isRejected)
     }
     
     func testThenWhenPending() {
-        weak var expectation = expectationWithDescription("Pending Promises shouldn't call their `then` callbacks.")
+        weak var expectation = self.expectation(description: "Pending Promises shouldn't call their `then` callbacks.")
         
         var thenCalled = false
         
@@ -74,12 +74,12 @@ class PromiseTests: XCTestCase {
         delay(0.05) {
             expectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertFalse(thenCalled)
     }
     
     func testRejectedAfterFulfilled() {
-        weak var expectation = expectationWithDescription("A Promise that is rejected after being fulfilled should not call any further `then` callbacks.")
+        weak var expectation = self.expectation(description: "A Promise that is rejected after being fulfilled should not call any further `then` callbacks.")
         
         var thenCalled = false
         
@@ -96,7 +96,7 @@ class PromiseTests: XCTestCase {
         delay(0.05) {
             expectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertTrue(thenCalled)
         XCTAssert(promise.isRejected)
     }
@@ -108,7 +108,7 @@ class PromiseTests: XCTestCase {
     }
     
     func testFulfilled() {
-        weak var expectation = expectationWithDescription("A Promise that has `fulfill` called on it should be fulfilled with the value passed to `fullfill`.")
+        weak var expectation = self.expectation(description: "A Promise that has `fulfill` called on it should be fulfilled with the value passed to `fullfill`.")
         
         let promise = Promise<Int>()
         
@@ -121,13 +121,13 @@ class PromiseTests: XCTestCase {
         delay(0.05) {
             expectation?.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertTrue(promise.value == 10)
         XCTAssert(promise.isFulfilled)
     }
     
     func testRejected() {
-        weak var expectation = expectationWithDescription("A Promise that is rejected should have its `onFailure` method called.")
+        weak var expectation = self.expectation(description: "A Promise that is rejected should have its `onFailure` method called.")
         
         let error = SimpleError()
         let promise = Promise<Int>()
@@ -138,13 +138,13 @@ class PromiseTests: XCTestCase {
         
         promise.reject(error)
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.error as? SimpleError, error)
         XCTAssert(promise.isRejected)
     }
     
     func testMap() {
-        weak var expectation = expectationWithDescription("")
+        weak var expectation = self.expectation(description: "")
         
         let promise = Promise(value: "someString").then({ string in
             return string.characters.count
@@ -155,13 +155,13 @@ class PromiseTests: XCTestCase {
             expectation?.fulfill()
         })
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.value, 20)
         XCTAssert(promise.isFulfilled)
     }
     
     func testFlatMap() {
-        weak var expectation = expectationWithDescription("A `then` callback that returns another Promise should execute and fulfill the next Promise.")
+        weak var expectation = self.expectation(description: "A `then` callback that returns another Promise should execute and fulfill the next Promise.")
         let promise = Promise<String>(work: { fulfill, reject in
             delay(0.05) {
                 fulfill("hello")
@@ -178,13 +178,13 @@ class PromiseTests: XCTestCase {
         })
         
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.value, 5)
         XCTAssert(promise.isFulfilled)
     }
         
     func testTrailingClosuresCompile() {
-        weak var expectation = expectationWithDescription("`Promise.all` should wait until multiple promises are fulfilled before returning.")
+        weak var expectation = self.expectation(description: "`Promise.all` should wait until multiple promises are fulfilled before returning.")
         
         let promise = Promise<String> { fulfill, reject in
             delay(0.05) {
@@ -204,7 +204,7 @@ class PromiseTests: XCTestCase {
             expectation?.fulfill()
         }
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
         XCTAssertEqual(promise.value, 6)
         XCTAssert(promise.isFulfilled)
     }
