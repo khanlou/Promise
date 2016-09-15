@@ -9,7 +9,10 @@
 import Foundation
 
 extension Promise {
-    static func all<T>(promises: [Promise<T>]) -> Promise<[T]> {
+
+    /// Wait for all the promises you give it to fulfill, and once they have, fulfill itself
+    /// with the array of all fulfilled values.
+    public static func all<T>(promises: [Promise<T>]) -> Promise<[T]> {
         return Promise<[T]>(work: { fulfill, reject in
             guard !promises.isEmpty else { fulfill([]); return }
             for promise in promises {
@@ -24,7 +27,8 @@ extension Promise {
         })
     }
 
-    static func delay(delay: NSTimeInterval) -> Promise<()> {
+    /// Resolves itself after some delay.
+    public static func delay(delay: NSTimeInterval) -> Promise<()> {
         return Promise<()>(work: { fulfill, reject in
             let nanoseconds = Int64(delay*Double(NSEC_PER_SEC))
             let time = dispatch_time(DISPATCH_TIME_NOW, nanoseconds)
@@ -33,8 +37,9 @@ extension Promise {
             })
         })
     }
-    
-    static func timeout<T>(timeout: NSTimeInterval) -> Promise<T> {
+
+    /// This promise will be rejected after a delay.
+    public static func timeout<T>(timeout: NSTimeInterval) -> Promise<T> {
         return Promise<T>(work: { fulfill, reject in
             delay(timeout).then({ _ in
                 reject(NSError(domain: "com.khanlou.Promise", code: -1111, userInfo: [ NSLocalizedDescriptionKey: "Timed out" ]))
@@ -42,7 +47,9 @@ extension Promise {
         })
     }
 
-    static func race<T>(promises: [Promise<T>]) -> Promise<T> {
+    /// Fulfills or rejects with the first promise that completes
+    /// (as opposed to waiting for all of them, like `.all()` does).
+    public static func race<T>(promises: [Promise<T>]) -> Promise<T> {
         return Promise<T>(work: { fulfill, reject in
             guard !promises.isEmpty else { fatalError() }
             for promise in promises {
@@ -50,33 +57,33 @@ extension Promise {
             }
         })
     }
-    
-    func addTimeout(timeout: NSTimeInterval) -> Promise<Value> {
+
+    public func addTimeout(timeout: NSTimeInterval) -> Promise<Value> {
         return Promise.race(Array([self, Promise<Value>.timeout(timeout)]))
     }
-    
-    func always(on queue: dispatch_queue_t, _ onComplete: Void -> Void) -> Promise<Value> {
+
+    public func always(on queue: dispatch_queue_t, _ onComplete: Void -> Void) -> Promise<Value> {
         return then(on: queue, { _ in
             onComplete()
-        }, { _ in
-            onComplete()
+            }, { _ in
+                onComplete()
         })
     }
-    
-    func always(onComplete: Void -> Void) -> Promise<Value> {
+
+    public func always(onComplete: Void -> Void) -> Promise<Value> {
         return always(on: dispatch_get_main_queue(), onComplete)
     }
 
-    
-    func recover(recovery: (ErrorType) -> Promise<Value>) -> Promise<Value> {
+
+    public func recover(recovery: (ErrorType) -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
             self.then(fulfill).onFailure({ error in
                 recovery(error).then(fulfill, reject)
             })
         })
     }
-    
-    static func retry<T>(count count: Int, delay: NSTimeInterval, generate: () -> Promise<T>) -> Promise<T> {
+
+    public static func retry<T>(count count: Int, delay: NSTimeInterval, generate: () -> Promise<T>) -> Promise<T> {
         if count <= 0 {
             return generate()
         }
@@ -88,9 +95,9 @@ extension Promise {
             }).then(fulfill).onFailure(reject)
         })
     }
-    
-    
-    static func zip<T, U>(first: Promise<T>, second: Promise<U>) -> Promise<(T, U)> {
+
+
+    public static func zip<T, U>(first: Promise<T>, second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
             let resolver: (Any) -> () = { _ in
                 if let firstValue = first.value, secondValue = second.value {
