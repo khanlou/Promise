@@ -121,10 +121,14 @@ final class Promise<Value> {
         })
     }
     
-    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> NewValue)) -> Promise<NewValue> {
+    func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) throws -> NewValue)) -> Promise<NewValue> {
         //this one is map
         return then(on: queue, { (value) -> Promise<NewValue> in
-            return Promise<NewValue>(value: onFulfilled(value))
+            do {
+                return Promise<NewValue>(value: try onFulfilled(value))
+            } catch let error {
+                return Promise<NewValue>(error: error)
+            }
         })
     }
     
