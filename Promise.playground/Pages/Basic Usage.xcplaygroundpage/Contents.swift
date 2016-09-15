@@ -19,9 +19,9 @@ func promisedString(str: String) -> Promise<String> {
 }
 
 
-promisedString("simple example").then { result in
+promisedString("simple example").then({ result in
     print("Got result: ", result)
-}
+})
 
 print("after creating promise")
 

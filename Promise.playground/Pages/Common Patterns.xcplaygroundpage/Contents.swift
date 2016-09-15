@@ -2,9 +2,9 @@
 import Promise  // <-- If there is an error here, build the project first.
 
 /*
- 
+
  Playing with the ideas in http://khanlou.com/2016/08/common-patterns-with-promises/
- 
+
  Set each `if false` to `true` to run that example.
 
  */
@@ -31,9 +31,9 @@ if false {
     let strings = [ "a", "b", "c" ]
     let promises = strings.map(promisedString)
 
-    Promise<[String]>.all(promises).then { allStrings -> Void in
+    Promise<[String]>.all(promises).then({ allStrings -> Void in
         print("got em all:", allStrings)
-    }
+    })
 }
 
 
@@ -44,9 +44,9 @@ if false {
 if false {
     print("Running .delay() example")
 
-    Promise<Void>.delay(1.0).then { _ -> Void in
+    Promise<Void>.delay(1.0).then({ _ -> Void in
         print("after delay")
-    }
+    })
 }
 
 
@@ -59,10 +59,10 @@ if false {
     let strings = [ "a", "b", "c", "d", "e", "f" ]
     let promises = strings.map(promisedString)
 
-    Promise<String>.race(promises).then { (value) -> Void in
+    Promise<String>.race(promises).then({ (value) -> Void in
         // If you run this multiple times, you might get a different result each time
         print("got: \(value)")
-    }
+    })
 }
 
 
@@ -78,9 +78,9 @@ if false {
         .then({ _ -> Void in
             print("success from timeout")
         })
-        .onFailure { error in
+        .onFailure({ error in
             print("failure from timeout: \(error)")
-    }
+        })
 }
 
 
@@ -90,16 +90,14 @@ if false {
 
 /// Helper function to make a promise that succeeds or fails from the given value
 func failablePromise(str: String, fail: Bool) -> Promise<String> {
-    let promise = Promise<String>()
-    dispatch_async(dispatch_get_global_queue(0, 0)) {
+    return Promise<String>(work: { fulfill, reject in
         if fail {
-            promise.reject(NSError(domain: "rejected", code: 1, userInfo: nil))
+            reject(NSError(domain: "rejected", code: 1, userInfo: nil))
         }
         else {
-            promise.fulfill(str)
+            fulfill(str)
         }
-    }
-    return promise
+    })
 }
 
 if false {
@@ -110,9 +108,9 @@ if false {
     failablePromise("recovery", fail: true)
         .then({ result -> Void in
             print("succeeded: \(result)")
-        }).onFailure { error in
+        }).onFailure({ error in
             print("failed \(error)")
-    }
+        })
 
     failablePromise("recovery", fail: true)
         .recover({ _ in
@@ -121,9 +119,9 @@ if false {
             return promisedString("from server")
         }).then({ result -> Void in
             print("succeeded: \(result)")
-        }).onFailure { error in
+        }).onFailure({ error in
             print("failed \(error)")
-    }
+        })
 }
 
 
@@ -140,9 +138,9 @@ if false {
         return failablePromise("retry", fail: i<3)
     }).then({ result -> Void in
         print("got result:", result)
-    }).onFailure { error in
+    }).onFailure({ error in
         print("failed: \(error)")
-    }
+    })
 }
 
 
