@@ -9,7 +9,7 @@ import Promise  // <-- If there is an error here, build the project first.
 
 /// Helper function to build/fulfill a Promise.
 /// - returns: A Promise that fulfills with the given string, after a delay.
-func promisedString(str: String) -> Promise<String> {
+func promisedString(_ str: String) -> Promise<String> {
     return Promise<String>(work: { fulfill, reject in
         print("sleeping…")
         sleep(1)
