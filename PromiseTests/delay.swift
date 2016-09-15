@@ -9,8 +9,7 @@
 import XCTest
 
 internal func delay(_ duration: TimeInterval, block: @escaping () -> ()) {
-    let time = DispatchTime.now() + Double(Int64(duration*Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
-    DispatchQueue.main.asyncAfter(deadline: time, execute: {
+    DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: {
         block()
     })
 }

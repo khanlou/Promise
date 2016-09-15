@@ -9,8 +9,8 @@
 import Foundation
 
 struct Callback<Value> {
-    let onFulfilled: (Value) -> Void
-    let onRejected: (Error) -> Void
+    let onFulfilled: (Value) -> ()
+    let onRejected: (Error) -> ()
     let queue: DispatchQueue
     
     func callFulfill(_ value: Value) {
@@ -26,7 +26,7 @@ struct Callback<Value> {
     }
 }
 
-enum State<Value> {
+enum State<Value>: CustomStringConvertible {
 
     /// The promise has not completed yet.
     /// Will transition to either the `fulfilled` or `rejected` state.
@@ -40,10 +40,6 @@ enum State<Value> {
     /// Will not transition to any other state.
     case rejected(error: Error)
 
-}
-
-// Convenience methods
-extension State {
 
     var isPending: Bool {
         if case .pending = self {
@@ -82,9 +78,8 @@ extension State {
         }
         return nil
     }
-}
 
-extension State: CustomStringConvertible {
+
     var description: String {
         switch self {
         case .fulfilled(let value):
@@ -118,9 +113,9 @@ final class Promise<Value> {
     
     convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) -> ()) {
         self.init()
-        queue.async {
+        queue.async(execute: {
             work(self.fulfill, self.reject)
-        }
+        })
     }
 
     /// - note: This one is "flatMap"
@@ -146,7 +141,7 @@ final class Promise<Value> {
     }
     
     @discardableResult
-    func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> Void, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
+    func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -163,16 +158,16 @@ final class Promise<Value> {
     }
 
     @discardableResult
-    func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> Void) -> Promise<Value> {
+    func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> ()) -> Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
-    func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
+    func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
     @discardableResult
-    func onFailure(_ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
+    func onFailure(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: DispatchQueue.main, { _ in }, onRejected)
     }
     
@@ -198,17 +193,17 @@ final class Promise<Value> {
     
     var value: Value? {
         var result: Value?
-        lockQueue.sync {
+        lockQueue.sync(execute: {
             result = self.state.value
-        }
+        })
         return result
     }
     
     var error: Error? {
         var result: Error?
-        lockQueue.sync {
+        lockQueue.sync(execute: {
             result = self.state.error
-        }
+        })
         return result
     }
     
@@ -220,16 +215,16 @@ final class Promise<Value> {
         fireCallbacksIfCompleted()
     }
     
-    private func addCallbacks(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> Void, onRejected: @escaping (Error) -> Void) {
+    private func addCallbacks(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
         let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, queue: queue)
-        lockQueue.async {
+        lockQueue.async(execute: {
             self.callbacks.append(callback)
-        }
+        })
         fireCallbacksIfCompleted()
     }
     
     private func fireCallbacksIfCompleted() {
-        lockQueue.async {
+        lockQueue.async(execute: {
             guard !self.state.isPending else { return }
             self.callbacks.forEach { callback in
                 switch self.state {
@@ -242,6 +237,6 @@ final class Promise<Value> {
                 }
             }
             self.callbacks.removeAll()
-        }
+        })
     }
 }

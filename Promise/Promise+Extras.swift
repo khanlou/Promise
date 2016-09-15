@@ -24,11 +24,10 @@ extension Promise {
         })
     }
 
+    /// - parameter delay: In seconds
     static func delay(_ delay: TimeInterval) -> Promise<()> {
         return Promise<()>(work: { fulfill, reject in
-            let nanoseconds = Int64(delay*Double(NSEC_PER_SEC))
-            let time = DispatchTime.now() + Double(nanoseconds) / Double(NSEC_PER_SEC)
-            DispatchQueue.main.asyncAfter(deadline: time, execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
                 fulfill(())
             })
         })
@@ -56,7 +55,7 @@ extension Promise {
     }
 
     @discardableResult
-    func always(on queue: DispatchQueue, _ onComplete: @escaping () -> Void) -> Promise<Value> {
+    func always(on queue: DispatchQueue, _ onComplete: @escaping () -> ()) -> Promise<Value> {
         return then(on: queue, { _ in
             onComplete()
         }, { _ in
@@ -65,7 +64,7 @@ extension Promise {
     }
 
     @discardableResult
-    func always(_ onComplete: @escaping () -> Void) -> Promise<Value> {
+    func always(_ onComplete: @escaping () -> ()) -> Promise<Value> {
         return always(on: DispatchQueue.main, onComplete)
     }
 
