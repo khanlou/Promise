@@ -93,25 +93,25 @@ enum State<Value>: CustomStringConvertible {
 }
 
 
-final class Promise<Value> {
+public final class Promise<Value> {
     
     private var state: State<Value>
     private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
     private var callbacks: [Callback<Value>] = []
     
-    init() {
+    public init() {
         state = .pending
     }
     
-    init(value: Value) {
+    public init(value: Value) {
         state = .fulfilled(value: value)
     }
     
-    init(error: Error) {
+    public init(error: Error) {
         state = .rejected(error: error)
     }
     
-    convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) -> ()) {
+    public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) -> ()) {
         self.init()
         queue.async(execute: {
             work(self.fulfill, self.reject)
@@ -120,12 +120,16 @@ final class Promise<Value> {
 
     /// - note: This one is "flatMap"
     @discardableResult
-    func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> Promise<NewValue>) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) throws -> Promise<NewValue>) -> Promise<NewValue> {
         return Promise<NewValue>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
                 onFulfilled: { value in
-                    onFulfilled(value).then(fulfill, reject)
+                    do {
+                        try onFulfilled(value).then(fulfill, reject)
+                    } catch let error {
+                        reject(error)
+                    }
                 },
                 onRejected: reject
             )
@@ -134,14 +138,18 @@ final class Promise<Value> {
     
     /// - note: This one is "map"
     @discardableResult
-    func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> NewValue) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) throws -> NewValue) -> Promise<NewValue> {
         return then(on: queue, { (value) -> Promise<NewValue> in
-            return Promise<NewValue>(value: onFulfilled(value))
+            do {
+                return Promise<NewValue>(value: try onFulfilled(value))
+            } catch let error {
+                return Promise<NewValue>(error: error)
+            }
         })
     }
     
     @discardableResult
-    func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -158,40 +166,40 @@ final class Promise<Value> {
     }
 
     @discardableResult
-    func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> ()) -> Promise<Value> {
+    public func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> ()) -> Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
-    func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
     @discardableResult
-    func onFailure(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func onFailure(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: DispatchQueue.main, { _ in }, onRejected)
     }
     
-    func reject(_ error: Error) {
+    public func reject(_ error: Error) {
         updateState(.rejected(error: error))
     }
     
-    func fulfill(_ value: Value) {
+    public func fulfill(_ value: Value) {
         updateState(.fulfilled(value: value))
     }
     
-    var isPending: Bool {
+    public var isPending: Bool {
         return !isFulfilled && !isRejected
     }
     
-    var isFulfilled: Bool {
+    public var isFulfilled: Bool {
         return value != nil
     }
     
-    var isRejected: Bool {
+    public var isRejected: Bool {
         return error != nil
     }
     
-    var value: Value? {
+    public var value: Value? {
         var result: Value?
         lockQueue.sync(execute: {
             result = self.state.value
@@ -199,7 +207,7 @@ final class Promise<Value> {
         return result
     }
     
-    var error: Error? {
+    public var error: Error? {
         var result: Error?
         lockQueue.sync(execute: {
             result = self.state.error
