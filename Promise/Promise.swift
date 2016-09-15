@@ -108,23 +108,31 @@ public final class Promise<Value> {
         })
     }
     
-    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> Promise<NewValue>)) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) throws -> Promise<NewValue>)) -> Promise<NewValue> {
         //this one is flatmap
         return Promise<NewValue>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
                 onFulfilled: { value in
-                    onFulfilled(value).then(fulfill, reject)
+                    do {
+                        try onFulfilled(value).then(fulfill, reject)
+                    } catch let error {
+                        reject(error)
+                    }
                 },
                 onRejected: reject
             )
         })
     }
     
-    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) -> NewValue)) -> Promise<NewValue> {
+    public func then<NewValue>(on queue: dispatch_queue_t = dispatch_get_main_queue(), _ onFulfilled: ((Value) throws -> NewValue)) -> Promise<NewValue> {
         //this one is map
         return then(on: queue, { (value) -> Promise<NewValue> in
-            return Promise<NewValue>(value: onFulfilled(value))
+            do {
+                return Promise<NewValue>(value: try onFulfilled(value))
+            } catch let error {
+                return Promise<NewValue>(error: error)
+            }
         })
     }
     

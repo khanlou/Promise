@@ -14,6 +14,7 @@
 		1A2A8CFE1D5D764600421E3E /* PromiseRetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */; };
 		1AE9F56F1D526F8A00185453 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */; };
 		1AF54F3B1D67D60000557CCB /* PromiseZipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */; };
+		1AFA1FA01D8A0C9500E4F76E /* PromiseThrowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */; };
 		1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80F91D5166C000C55D5A /* delay.swift */; };
 		1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */; };
 		3454F9D21D4FACD000985BBF /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 3454F9D11D4FACD000985BBF /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +41,7 @@
 		1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRetryTests.swift; sourceTree = "<group>"; };
 		1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Extras.swift"; sourceTree = "<group>"; };
 		1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseZipTests.swift; sourceTree = "<group>"; };
+		1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseThrowsTests.swift; sourceTree = "<group>"; };
 		1AFF80F91D5166C000C55D5A /* delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delay.swift; sourceTree = "<group>"; };
 		1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseAllTests.swift; sourceTree = "<group>"; };
 		3454F9CE1D4FACD000985BBF /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -114,6 +116,7 @@
 				1A2A8CFB1D5D743100421E3E /* PromiseRecoverTests.swift */,
 				1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */,
 				1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */,
+				1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */,
 			);
 			path = PromiseTests;
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				1A2A8CFA1D5D717D00421E3E /* PromiseAlwaysTests.swift in Sources */,
 				1A2A8CFE1D5D764600421E3E /* PromiseRetryTests.swift in Sources */,
 				1A2A8CF81D5D58A800421E3E /* PromiseRaceTests.swift in Sources */,
+				1AFA1FA01D8A0C9500E4F76E /* PromiseThrowsTests.swift in Sources */,
 				1AF54F3B1D67D60000557CCB /* PromiseZipTests.swift in Sources */,
 				1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */,
 				1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */,
