@@ -26,8 +26,8 @@ extension Promise {
         })
     }
 
-    /// - parameter delay: In seconds
     /// Resolves itself after some delay.
+    /// - parameter delay: In seconds
     public static func delay(_ delay: TimeInterval) -> Promise<()> {
         return Promise<()>(work: { fulfill, reject in
             DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: {
@@ -60,7 +60,7 @@ extension Promise {
     }
 
     @discardableResult
-    func always(on queue: DispatchQueue, _ onComplete: @escaping () -> ()) -> Promise<Value> {
+    public func always(on queue: DispatchQueue, _ onComplete: @escaping () -> ()) -> Promise<Value> {
         return then(on: queue, { _ in
             onComplete()
             }, { _ in
