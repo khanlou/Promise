@@ -25,7 +25,7 @@ class PromiseRaceTests: XCTestCase {
             }
         })
         let promise3 = Promise<Int>(work: { fulfill, reject in
-            delay(0.09) {
+            delay(0.15) {
                 fulfill(3)
             }
         })
