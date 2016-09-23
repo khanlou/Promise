@@ -19,7 +19,7 @@ extension Promise {
                     if !promises.contains(where: { $0.isRejected || $0.isPending }) {
                         fulfill(promises.flatMap({ $0.value }))
                     }
-                }).onFailure({ error in
+                }).catch({ error in
                     reject(error)
                 })
             }
@@ -76,7 +76,7 @@ extension Promise {
     
     public func recover(_ recovery: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
-            self.then(fulfill).onFailure({ error in
+            self.then(fulfill).catch({ error in
                 recovery(error).then(fulfill, reject)
             })
         })
@@ -92,7 +92,7 @@ extension Promise {
                 return self.delay(delay).then({
                     return retry(count: count-1, delay: delay, generate: generate)
                 })
-            }).then(fulfill).onFailure(reject)
+            }).then(fulfill).catch(reject)
         })
     }
         

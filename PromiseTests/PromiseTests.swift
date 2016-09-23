@@ -54,7 +54,7 @@ class PromiseTests: XCTestCase {
             XCTFail()
         }).then({ string in
             XCTFail()
-        }).onFailure({ error in
+        }).catch({ error in
             expectation?.fulfill()
         })
         waitForExpectations(timeout: 1, handler: nil)
@@ -127,12 +127,12 @@ class PromiseTests: XCTestCase {
     }
     
     func testRejected() {
-        weak var expectation = self.expectation(description: "A Promise that is rejected should have its `onFailure` method called.")
+        weak var expectation = self.expectation(description: "A Promise that is rejected should have its `catch` method called.")
         
         let error = SimpleError()
         let promise = Promise<Int>()
         
-        promise.onFailure({ _ in
+        promise.catch({ _ in
             expectation?.fulfill()
         })
         

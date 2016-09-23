@@ -170,12 +170,12 @@ public final class Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
-    public func onFailure(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func `catch`(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
     @discardableResult
-    public func onFailure(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func `catch`(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: DispatchQueue.main, { _ in }, onRejected)
     }
     

@@ -99,7 +99,7 @@ class PromiseAllTests: XCTestCase {
             XCTFail()
         })
         
-        final.onFailure({ _ in
+        final.catch({ _ in
             expectation?.fulfill()
         })
         
@@ -136,7 +136,7 @@ class PromiseAllTests: XCTestCase {
             XCTFail()
         })
         
-        final.onFailure({ _ in
+        final.catch({ _ in
             expectation?.fulfill()
         })
         

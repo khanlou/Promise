@@ -35,7 +35,7 @@ class PromiseDelayTests: XCTestCase {
         XCTAssert(goodPromise.isPending)
         XCTAssert(badPromise.isPending)
         
-        goodPromise.onFailure({ _ in
+        goodPromise.catch({ _ in
             expectation?.fulfill()
         })
         
@@ -75,7 +75,7 @@ class PromiseDelayTests: XCTestCase {
         
         XCTAssert(promise.isPending)
         
-        promise.onFailure({ _ in
+        promise.catch({ _ in
             expectation?.fulfill()
         })
         

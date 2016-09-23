@@ -78,7 +78,7 @@ if false {
         .then({ _ -> Void in
             print("success from timeout")
         })
-        .onFailure({ error in
+        .catch({ error in
             print("failure from timeout: \(error)")
         })
 }
@@ -108,7 +108,7 @@ if false {
     failablePromise("recovery", fail: true)
         .then({ result -> Void in
             print("succeeded: \(result)")
-        }).onFailure({ error in
+        }).catch({ error in
             print("failed \(error)")
         })
 
@@ -119,7 +119,7 @@ if false {
             return promisedString("from server")
         }).then({ result -> Void in
             print("succeeded: \(result)")
-        }).onFailure({ error in
+        }).catch({ error in
             print("failed \(error)")
         })
 }
@@ -138,7 +138,7 @@ if false {
         return failablePromise("retry", fail: i<3)
     }).then({ result -> Void in
         print("got result:", result)
-    }).onFailure({ error in
+    }).catch({ error in
         print("failed: \(error)")
     })
 }

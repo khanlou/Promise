@@ -54,7 +54,7 @@ class PromiseRaceTests: XCTestCase {
         
         let final = Promise<Int>.race([promise1, promise2])
         
-        final.onFailure({ _ in
+        final.catch({ _ in
             expectation?.fulfill()
         })
         
@@ -87,7 +87,7 @@ class PromiseRaceTests: XCTestCase {
         
         let final = Promise<Int>.race([promise1, promise2])
         
-        final.onFailure({ _ in
+        final.catch({ _ in
             expectation?.fulfill()
         })
         
