@@ -111,10 +111,14 @@ public final class Promise<Value> {
         state = .rejected(error: error)
     }
     
-    public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) -> ()) {
+    public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ()) {
         self.init()
         queue.async(execute: {
-            work(self.fulfill, self.reject)
+            do {
+                try work(self.fulfill, self.reject)
+            } catch let error {
+                self.reject(error)
+            }
         })
     }
 

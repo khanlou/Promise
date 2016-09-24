@@ -40,6 +40,18 @@ class PromiseTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
     
+    func testAsyncThrowing() {
+        weak var expectation = self.expectation(description: "The `work:` based constructor of Promise should work correctly.")
+        
+        let promise = Promise<String>(work: { (fulfill, reject) in
+            throw SimpleError()
+        }).catch({ error in
+            expectation?.fulfill()
+        })
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertNotNil(promise.error)
+    }
+    
     func testAsyncRejection() {
         weak var expectation = self.expectation(description: "Calling `reject` from the `work:` constructor should cause the Promise to be rejceted.")
         let promise = Promise<String>(work: { (fulfill, reject) in
