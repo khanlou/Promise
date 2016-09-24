@@ -50,6 +50,7 @@ class PromiseTests: XCTestCase {
         })
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssertNotNil(promise.error)
+        XCTAssertEqual(promise.error, SimpleError())
     }
     
     func testAsyncRejection() {
