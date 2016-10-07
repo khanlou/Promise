@@ -1,5 +1,7 @@
 # Promise
 
+![](https://api.travis-ci.org/khanlou/Promise.svg)
+
 A Promise library for Swift, based partially on [Javascript's A+ spec](https://promisesaplus.com/).
 
 Promises are a way to chain asynchronous tasks. Normally, asynchronous tasks take a callback (or sometimes two, one for success and one for failure), in the form of a block, that is called when the asynchronous operation is completed. To perform more than one asynchronous operation, you have to nest the second one inside the completion block of the first one:
