@@ -1,5 +1,5 @@
 language: objective-c
 osx_image: xcode8
 xcode_project: Promise.xcodeproj
-xcode_scheme: PromiseTests
+xcode_scheme: Promise
 xcode_sdk: iphonesimulator10.0
