@@ -4,4 +4,4 @@ xcode_project: Promise.xcodeproj
 xcode_scheme: Promise
 xcode_sdk: iphonesimulator10.0
 script:
-  - set -o pipefail && xcodebuild -workspace Promise.xcworkspace -scheme Promise -sdk iphonesimulator -destination 'platform=iOS Simulator,OS=10.0,name=iPhone SE' build test | xcpretty
+  - set -o pipefail && xcodebuild -project Promise.xcodeproj -scheme Promise -sdk iphonesimulator -destination 'platform=iOS Simulator,OS=10.0,name=iPhone SE' build test | xcpretty
