@@ -174,6 +174,7 @@ public final class Promise<Value> {
         return then(on: queue, onFulfilled, { _ in })
     }
     
+    @discardableResult
     public func `catch`(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
