@@ -153,7 +153,7 @@ public final class Promise<Value> {
     }
     
     @discardableResult
-    public func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func then(on queue: DispatchQueue = .main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> () = { _ in }) -> Promise<Value> {
         return Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
@@ -168,20 +168,10 @@ public final class Promise<Value> {
             )
         })
     }
-
-    @discardableResult
-    public func then(on queue: DispatchQueue = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> ()) -> Promise<Value> {
-        return then(on: queue, onFulfilled, { _ in })
-    }
     
     @discardableResult
-    public func `catch`(on queue: DispatchQueue, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func `catch`(on queue: DispatchQueue = .main, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
-    }
-    
-    @discardableResult
-    public func `catch`(_ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
-        return then(on: DispatchQueue.main, { _ in }, onRejected)
     }
     
     public func reject(_ error: Error) {
