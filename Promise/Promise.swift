@@ -195,19 +195,15 @@ public final class Promise<Value> {
     }
     
     public var value: Value? {
-        var result: Value?
-        lockQueue.sync(execute: {
-            result = self.state.value
+        return lockQueue.sync(execute: {
+            return self.state.value
         })
-        return result
     }
     
     public var error: Error? {
-        var result: Error?
-        lockQueue.sync(execute: {
-            result = self.state.error
+        return lockQueue.sync(execute: {
+            return self.state.error
         })
-        return result
     }
     
     private func updateState(_ state: State<Value>) {
