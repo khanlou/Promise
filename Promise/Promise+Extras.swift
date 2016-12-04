@@ -8,6 +8,8 @@
 
 import Foundation
 
+struct PromiseCheckError: Error { }
+
 extension Promise {
     /// Wait for all the promises you give it to fulfill, and once they have, fulfill itself
     /// with the array of all fulfilled values.
@@ -81,7 +83,16 @@ extension Promise {
             })
         })
     }
-    
+
+    public func ensure(_ check: @escaping (Value) -> Bool) -> Promise<Value> {
+        return self.then({ (value: Value) -> Value in
+            guard check(value) else {
+                throw PromiseCheckError()
+            }
+            return value
+        })
+    }
+
 
     public static func retry<T>(count: Int, delay: TimeInterval, generate: @escaping () -> Promise<T>) -> Promise<T> {
         if count <= 0 {
