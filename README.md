@@ -4,21 +4,11 @@
 
 A Promise library for Swift, based partially on [Javascript's A+ spec](https://promisesaplus.com/).
 
-Promises are a way to chain asynchronous tasks. Normally, asynchronous tasks take a callback (or sometimes two, one for success and one for failure), in the form of a block, that is called when the asynchronous operation is completed. To perform more than one asynchronous operation, you have to nest the second one inside the completion block of the first one:
+## What is a Promise?
 
-```swift
-APIClient.fetchCurrentUser(success: { currentUser in
-    APIClient.fetchFollowers(user: currentUser, success: { followers in
-        // you now have an array of followers
-    }, failure: { error in
-        // handle the error
-    })
-}, failure: { error in
-    // handle the error
-})
-```
+A Promise is a way to represent a value that will exist (or fail with an error) at some point in the future. In the same way that an `Optional` represents a value that may be there.
 
-Promises are a way of formalizing these completion blocks to make chaining asynchronous processes much easier. If the system knows what success and what failure look like, composing those asynchronous operations becomes much easier.  For example, it becomes trivial to write reusable code that can:
+Using a special type to represent values that will exist in the future means that those values can be combined, transformed, and built in systematic ways. If the system knows what success and what failure look like, composing those asynchronous operations becomes much easier. For example, it becomes trivial to write reusable code that can:
 
 * perform a chain of dependent asynchronous operations with one completion block at the end
 * perform many independent asynchronous operations simultaneously with one completion block
@@ -26,19 +16,173 @@ Promises are a way of formalizing these completion blocks to make chaining async
 * retry asynchronous operations
 * add a timeout to asynchronous operations
 
-The code sample above, when converted into promises, looks like this:
+Promises are suited for any asynchronous action that can succeed or fail exactly once, like HTTP requests. If there is an asynchronous action that can "succeed" more than once, or delivers a series of values over time instead of just one, take a look at [Signals](https://github.com/JensRavens/Interstellar/) or [Observables](https://github.com/ReactiveX/RxSwift).
 
-```swift
-APIClient.fetchCurrentUser().then({ currentUser in
-    return APIClient.fetchFollowers(user: currentUser)
-}).then({ followers in
-    // you now have an array of followers
-)}.onFailure({ error in
-    // hooray, a single failure block!
-})
-```
+## Basic Usage
 
-This library isn't ready for production yet.  It doesn't have public declarations or a podspec yet, because I haven't used it in live app yet.
+To access the value whenever it has arrived, you call the `then` method with a block.
+
+    let usersPromise = fetchUsers() // Promise<[User]>
+    usersPromise.then({ users in
+        self.users = users
+    })
+
+All usage of the data in the `users` Promise is gated through the `then` method.
+
+In addition to performing side effects (like setting the `users` instance variable on `self`), `then` enables you do two other things. First, you can transform the contents of the Promise, and second, you can kick off another Promise, to do more asynchronous work. To do either of these things, return something from the block you pass to `then`. Each time you call `then`, the existing Promise will return a new Promise.
+
+    let usersPromise = fetchUsers() // Promise<[User]>
+    let firstUserPromise = usersPromise.then({ users in // Promise<User>
+        return users[0]
+    })
+    let followersPromise = firstUserPromise.then({ firstUser in //Promise<[Follower]>
+	    return fetchFollowers(of: firstUser)
+	 })
+	 followersPromise.then({ followers in
+	    self.followers = followers
+	 })
+
+Based on whether you return a regular value or a promise, the `Promise` will determine whether it should transform the internal contents, or fire off the next promise and await its results.
+
+As long as the block you pass to `then` is one line long, its type signature will be inferred, which will make Promises much easier to read and work with.
+
+Since each call to `then` returns a new `Promise`, you can write them in a big chain. The code above, as a chain, would be written:
+
+    fetchUsers()
+        .then({ users in
+            return users[0]
+        })
+        .then({ firstUser in
+            return fetchFollowers(of: firstUser)
+        })
+        .then({ followers in
+            self.followers = followers
+        })
+
+To catch any errors that are created along the way, you can add a `catch` block as well:
+
+    fetchUsers()
+        .then({ users in
+            return users[0]
+        })
+        .then({ firstUser in
+            return fetchFollowers(of: firstUser)
+        })
+        .then({ followers in
+            self.followers = followers
+        })
+        .catch({ error in
+            displayError(error)
+        })
+
+If any step in the chain fails, no more `then` blocks will be executed. Only failure blocks are executed. This is enforced in the type system as well. If the `fetchUsers()` promise fails (for example, because of a lack of internet), there's no way for the promise to construct a valid value for the `users` variable, and there's no way that block could be called.
+
+## Advanced Usage
+
+Because promises formalize how success and failure blocks look, it's possible to build behaviors on top of them. 
+
+### `always`
+
+For example, if you want to execute code when the promise fulfills — regardless of whether it succeeds or fails – you can use `always`.
+
+    activityIndicator.startAnimating()
+    fetchUsers()
+        .then({ users in
+            self.users = users
+        })
+        .always({
+           self.activityIndicator.stopAnimating()
+        })
+
+Even if the network request fails, the activity indicator will stop. Note that the block that you pass to `always` has no parameters. Because the `Promise` doesn't know if it will succeed or fail, it will give you neither a value nor an error.
+
+### `all`
+
+`Promise.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values. For example, you might want to write code to hit an API endpoint once for each item in an array. `map` and `Promise.all` make that super easy:
+
+	let userPromises = users.map({ user in
+		APIClient.followUser(user)
+	})
+	Promise<()>.all(userPromises)
+		.then({
+			//all the users are now followed!
+		})
+		.catch  ({ error in
+			//one of the API requests failed
+		})
+
+### `ensure`
+
+`ensure` is a method that takes a predicate, and rejects the promise chain if that predicate fails.
+
+    URLSession.shared.dataTask(with: request)
+        .ensure({ data, httpResponse in
+            return httpResponse.statusCode == 200
+        })
+        .then({ data, httpResponse in
+            // the statusCode is valid
+        })
+        .catch({ error in 
+            // the network request failed, or the status code was invalid
+        })
+
+### Others
+
+These are some of the most useful behaviors, but there are others as well, like `race` (which races multiple promises), `retry` (which lets you retry a single promise multiple times), and `recover` (which lets you return a new `Promise` given an error, allowing you to recover from failure), and others.
+
+You can find these behaviors in the [Promises+Extras.swift](https://github.com/khanlou/Promise/blob/master/Promise/Promise%2BExtras.swift) file.
+
+## Ease of Use
+
+I made several design decisions when writing this `Promise` library, erring towards making the library as easy to use as possible.
+
+### Simplified Naming
+
+Other promise libraries use the functional names for `then`, such as `map` and `flatMap`. The benefit to using these monadic functional terms is minor, but cost, in terms of understanding, is high. In this library, you call `then`, and return anything you need to, and the library figures out how to handle it.
+
+### Error Parameterization
+
+Other promise libraries allow you to define what type the error each promise will return. In theory, this a useful feature, allowing you to know what type the error will be in `catch` blocks.
+
+In practice, this is stifling. In practice, if you're using errors from two different domains, you have to either a) use a lowest common denominator error, like `NSError`, or b) call a method like `mapError` to convert the error from one domain to another.
+
+Also note that Swift's built-in error handling system doesn't have typed errors, opting for pattern matching instead.
+
+### Throwing
+
+Lastly, you can use `try` and `throw` from within all the blocks, and the library will automatically translate it to a promise rejection. This makes working with APIs that throw much more easily. To extend our `URLSession` example, we can use the throwing JSONSerialization API easily.
+
+    URLSession.shared.dataTask(with: request)
+        .ensure({ data, httpResponse in httpResponse.statusCode == 200 })
+        .then({ data, httpResponse in
+            return try JSONSerialization.jsonObject(with: data)
+        })
+        .then({ json in
+            // use the json
+        })
+
+Working with optionals can be made simpler with a little extension.
+
+    struct NilError: Error { }
+
+    extension Optional {
+        func unwrap() throws -> Wrapped {
+            guard let result = self else {
+                throw NilError()
+            }
+            return result
+        }
+    }
+
+Because you're in an environment where you can freely throw and it will be handled for you (in the form of a rejected Promise), you can now easily unwrap optionals. For example, if you need a specific key out of a json dictionary:
+
+    .then({ json in
+        return try (json["user"] as? [String: Any]).unwrap()
+    })
+
+And you will transform your optional into a non-optional.
+
+## Playing Around
 
 To get started playing with this library, you can use the included `Promise.playground`.  Simply open the `.xcodeproj`, build the scheme, and then open the playground (from within the project) and start playing.
 
