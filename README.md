@@ -6,7 +6,7 @@ A Promise library for Swift, based partially on [Javascript's A+ spec](https://p
 
 ## What is a Promise?
 
-A Promise is a way to represent a value that will exist (or fail with an error) at some point in the future. In the same way that an `Optional` represents a value that may be there.
+A Promise is a way to represent a value that will exist (or will fail with an error) at some point in the future. This is similar to how an `Optional` represents a value that may or may not be there.
 
 Using a special type to represent values that will exist in the future means that those values can be combined, transformed, and built in systematic ways. If the system knows what success and what failure look like, composing those asynchronous operations becomes much easier. For example, it becomes trivial to write reusable code that can:
 
@@ -16,11 +16,11 @@ Using a special type to represent values that will exist in the future means tha
 * retry asynchronous operations
 * add a timeout to asynchronous operations
 
-Promises are suited for any asynchronous action that can succeed or fail exactly once, like HTTP requests. If there is an asynchronous action that can "succeed" more than once, or delivers a series of values over time instead of just one, take a look at [Signals](https://github.com/JensRavens/Interstellar/) or [Observables](https://github.com/ReactiveX/RxSwift).
+Promises are suited for any asynchronous action that can succeed or fail exactly once, such as HTTP requests. If there is an asynchronous action that can "succeed" more than once, or delivers a series of values over time instead of just one, take a look at [Signals](https://github.com/JensRavens/Interstellar/) or [Observables](https://github.com/ReactiveX/RxSwift).
 
 ## Basic Usage
 
-To access the value whenever it has arrived, you call the `then` method with a block.
+To access the value once it arrives, you call the `then` method with a block.
 
     let usersPromise = fetchUsers() // Promise<[User]>
     usersPromise.then({ users in
