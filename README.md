@@ -77,6 +77,42 @@ To catch any errors that are created along the way, you can add a `catch` block 
 
 If any step in the chain fails, no more `then` blocks will be executed. Only failure blocks are executed. This is enforced in the type system as well. If the `fetchUsers()` promise fails (for example, because of a lack of internet), there's no way for the promise to construct a valid value for the `users` variable, and there's no way that block could be called.
 
+## Creating Promise
+
+To create a promise, there is a convenience initializer that takes a block and provides functions to `fulfill` or `reject` the promise:
+
+```
+let promise = Promise<Data>(work: { fulfill, reject in
+    try fulfill(Data(contentsOf: someURL)
+})
+```
+
+It will automatically run on a global background thread. 
+
+You can use this initializer to wrap a completion block-based API, like `URLSession`.
+
+```
+let promise = Promise<(Data, HTTPURLResponse)>(work: { fulfill, reject in
+    self.dataTask(with: request, completionHandler: { data, response, error in
+        if let error = error {
+            reject(error)
+        } else if let data = data, let response = response as? HTTPURLResponse {
+            fulfill((data, response))
+        } else {
+            fatalError("Something has gone horribly wrong.")
+        }
+    }).resume()
+})
+```
+
+For delegate-based APIs, you can can create a promise in the `.pending` state with the default initializer. If the API that you're wrapping is sensitive to which thread it's being run on, like any UIKit code, be sure to pass add a `queue: .main` parameter to the `work:` initializer, and it will be executed on the main queue.
+
+```
+let promise = Promise()
+```
+
+and use the `fulfill` and `reject` instance methods to change it's state. 
+
 ## Advanced Usage
 
 Because promises formalize how success and failure blocks look, it's possible to build behaviors on top of them. 
@@ -181,6 +217,23 @@ Because you're in an environment where you can freely throw and it will be handl
     })
 
 And you will transform your optional into a non-optional.
+
+### Threading Model
+
+The threading model for this library is dead simple. `init(work:)` happens on a background queue by default, and every other block-based method (`then`, `catch`, `always`, etc) executes on the main thread. These can be overridden by passing in a `DispatchQueue` object for the first parameter.
+
+```
+Promise<Void>(queue: .main, work: { fulfill, reject in
+    viewController.present(viewControllerToPresent, animated: flag, completion: {
+        fulfill()
+    })
+}).then(on: .global(), {
+	return try Data(contentsOf: someURL)
+}).then(on: .main, {
+	self.data = data
+})
+
+```
 
 ## Playing Around
 
