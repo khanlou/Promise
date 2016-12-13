@@ -32,6 +32,29 @@ class PromiseRecoverTests: XCTestCase {
         XCTAssert(promise.isFulfilled)
     }
     
+    func testRecoverWithThrowingFunction() {
+        weak var expectation = self.expectation(description: "`Promise.recover` should allow throwing functions")
+
+        let promise = Promise<Int>(work: { fulfill, reject in
+            delay(0.1) {
+                reject(SimpleError())
+            }
+        }).recover({ error in
+            XCTAssert(error as? SimpleError == SimpleError())
+            _ = try JSONSerialization.data(withJSONObject: ["key": "value"], options: [])
+            return Promise(work: { (fulfill, reject) in
+                fulfill(5)
+            })
+        }).always({
+            expectation?.fulfill()
+        })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        guard let int = promise.value else { XCTFail(); return }
+        XCTAssertEqual(int, 5)
+        XCTAssert(promise.isFulfilled)
+    }
+
     func testRecoverInstant() {
         weak var expectation = self.expectation(description: "`Promise.recover` should recover if the initial promise is rejected.")
         
