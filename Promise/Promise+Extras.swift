@@ -76,10 +76,14 @@ extension Promise {
     }
 
     
-    public func recover(_ recovery: @escaping (Error) -> Promise<Value>) -> Promise<Value> {
+    public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
             self.then(fulfill).catch({ error in
-                recovery(error).then(fulfill, reject)
+                do {
+                    try recovery(error).then(fulfill, reject)
+                } catch (let error) {
+                    reject(error)
+                }
             })
         })
     }
