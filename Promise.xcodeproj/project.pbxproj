@@ -22,6 +22,7 @@
 		3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3454F9CE1D4FACD000985BBF /* Promise.framework */; };
 		3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9DD1D4FACD000985BBF /* PromiseTests.swift */; };
 		3454F9E91D4FACFB00985BBF /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9E81D4FACFB00985BBF /* Promise.swift */; };
+		72B61D3C1E00E5830008E829 /* Wrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B61D3B1E00E5830008E829 /* Wrench.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		3454F9DD1D4FACD000985BBF /* PromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
 		3454F9DF1D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3454F9E81D4FACFB00985BBF /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		72B61D3B1E00E5830008E829 /* Wrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wrench.swift; sourceTree = "<group>"; };
 		76E25E381D8483D0000A58DF /* Promise.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Promise.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -120,6 +122,7 @@
 				1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */,
 				1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */,
 				1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */,
+				72B61D3B1E00E5830008E829 /* Wrench.swift */,
 			);
 			path = PromiseTests;
 			sourceTree = "<group>";
@@ -248,6 +251,7 @@
 				1A2A8CF81D5D58A800421E3E /* PromiseRaceTests.swift in Sources */,
 				1AFA1FA01D8A0C9500E4F76E /* PromiseThrowsTests.swift in Sources */,
 				1AF54F3B1D67D60000557CCB /* PromiseZipTests.swift in Sources */,
+				72B61D3C1E00E5830008E829 /* Wrench.swift in Sources */,
 				1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */,
 				1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */,
 				3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */,

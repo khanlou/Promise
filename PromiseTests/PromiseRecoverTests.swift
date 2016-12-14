@@ -55,6 +55,28 @@ class PromiseRecoverTests: XCTestCase {
         XCTAssert(promise.isFulfilled)
     }
 
+    func testRecoverWithThrowingFunctionError() {
+        weak var expectation = self.expectation(description: "`Promise.recover` should trigger `catch` when an error is thrown")
+
+        let promise = Promise<Int>(work: { fulfill, reject in
+            delay(0.1) {
+                reject(SimpleError())
+            }
+        }).recover({ (error) -> Promise<Int> in
+            let wrench = Wrench()
+            try wrench.throw()
+
+            return Promise(value: 2)
+        }).catch({ error in
+            let wrenchError = error as? WrenchError
+            XCTAssertNotNil(wrenchError, "Caught error here should be from the thrown function in `recover`")
+            expectation?.fulfill()
+        })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssert(promise.isRejected)
+    }
+
     func testRecoverInstant() {
         weak var expectation = self.expectation(description: "`Promise.recover` should recover if the initial promise is rejected.")
         
