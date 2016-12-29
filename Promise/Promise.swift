@@ -96,7 +96,7 @@ enum State<Value>: CustomStringConvertible {
 public final class Promise<Value> {
     
     private var state: State<Value>
-    private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
+    private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated, attributes: .concurrent)
     private var callbacks: [Callback<Value>] = []
     
     public init() {
@@ -208,34 +208,32 @@ public final class Promise<Value> {
     
     private func updateState(_ state: State<Value>) {
         guard self.isPending else { return }
-        lockQueue.sync(execute: {
+        lockQueue.async(flags: .barrier, execute: {
             self.state = state
+            self.fireCallbacksIfCompleted()
         })
-        fireCallbacksIfCompleted()
     }
     
     private func addCallbacks(on queue: DispatchQueue, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
         let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, queue: queue)
-        lockQueue.async(execute: {
+        lockQueue.async(flags: .barrier, execute: {
             self.callbacks.append(callback)
+            self.fireCallbacksIfCompleted()
         })
-        fireCallbacksIfCompleted()
     }
     
     private func fireCallbacksIfCompleted() {
-        lockQueue.async(execute: {
-            guard !self.state.isPending else { return }
-            self.callbacks.forEach { callback in
-                switch self.state {
-                case let .fulfilled(value):
-                    callback.callFulfill(value)
-                case let .rejected(error):
-                    callback.callReject(error)
-                default:
-                    break
-                }
+        guard !self.state.isPending else { return }
+        self.callbacks.forEach { callback in
+            switch self.state {
+            case let .fulfilled(value):
+                callback.callFulfill(value)
+            case let .rejected(error):
+                callback.callReject(error)
+            default:
+                break
             }
-            self.callbacks.removeAll()
-        })
+        }
+        self.callbacks.removeAll()
     }
 }
