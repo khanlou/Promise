@@ -8,19 +8,50 @@
 
 import Foundation
 
+protocol ExecutionContext {
+    func async(_ work: @escaping () -> Void)
+}
+
+extension DispatchQueue: ExecutionContext {
+    func async(_ work: @escaping () -> Void) {
+        self.async(execute: work)
+    }
+}
+
+public class InvalidatableQueue: ExecutionContext {
+
+    private var valid = true
+
+    private let queue: DispatchQueue
+
+    init(queue: DispatchQueue = .main) {
+        self.queue = queue
+    }
+
+    public func invalidate() {
+        valid = false
+    }
+
+    func async(_ work: @escaping () -> Void) {
+        guard valid else { return }
+        self.queue.async(execute: work)
+    }
+
+}
+
 struct Callback<Value> {
     let onFulfilled: (Value) -> ()
     let onRejected: (Error) -> ()
-    let queue: DispatchQueue
+    let queue: ExecutionContext
     
     func callFulfill(_ value: Value) {
-        queue.async(execute: {
+        queue.async({
             self.onFulfilled(value)
         })
     }
     
     func callReject(_ error: Error) {
-        queue.async(execute: {
+        queue.async({
             self.onRejected(error)
         })
     }
