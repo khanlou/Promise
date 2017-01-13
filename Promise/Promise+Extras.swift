@@ -62,19 +62,13 @@ extension Promise {
     }
 
     @discardableResult
-    public func always(on queue: DispatchQueue, _ onComplete: @escaping () -> ()) -> Promise<Value> {
+    public func always(on queue: ExecutionContext = DispatchQueue.main, _ onComplete: @escaping () -> ()) -> Promise<Value> {
         return then(on: queue, { _ in
             onComplete()
             }, { _ in
                 onComplete()
         })
     }
-
-    @discardableResult
-    public func always(_ onComplete: @escaping () -> ()) -> Promise<Value> {
-        return always(on: DispatchQueue.main, onComplete)
-    }
-
     
     public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
