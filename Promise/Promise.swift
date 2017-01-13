@@ -18,7 +18,7 @@ extension DispatchQueue: ExecutionContext {
     }
 }
 
-public class InvalidatableQueue: ExecutionContext {
+public final class InvalidatableQueue: ExecutionContext {
 
     private var valid = true
 
