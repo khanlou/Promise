@@ -24,7 +24,7 @@ public final class InvalidatableQueue: ExecutionContext {
 
     private let queue: DispatchQueue
 
-    init(queue: DispatchQueue = .main) {
+    public init(queue: DispatchQueue = .main) {
         self.queue = queue
     }
 

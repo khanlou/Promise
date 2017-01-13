@@ -8,7 +8,7 @@
 
 import XCTest
 
-@testable import Promise
+import Promise
 
 class ExecutionContextTests: XCTestCase {
 

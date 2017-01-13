@@ -7,7 +7,7 @@
 //
 
 import XCTest
-@testable import Promise
+import Promise
 
 class PromiseTests: XCTestCase {
 

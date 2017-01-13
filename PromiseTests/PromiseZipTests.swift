@@ -9,7 +9,7 @@
 import XCTest
 import Foundation
 
-@testable import Promise
+import Promise
 
 class PromiseZipTests: XCTestCase {
     func testZipping2() {
