@@ -95,13 +95,14 @@ class PromiseTests: XCTestCase {
         weak var expectation = self.expectation(description: "A Promise that is rejected after being fulfilled should not call any further `then` callbacks.")
         
         var thenCalled = false
-        
+        var thenCalledAgain = false
+
         let promise = Promise(value: 5).then({ _ in
             thenCalled = true
         })
         
         promise.then({ _ in
-            XCTFail()
+            thenCalledAgain = true
         })
         
         promise.reject(SimpleError())
@@ -111,7 +112,8 @@ class PromiseTests: XCTestCase {
         }
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssertTrue(thenCalled)
-        XCTAssert(promise.isRejected)
+        XCTAssertTrue(thenCalledAgain)
+        XCTAssert(promise.isFulfilled)
     }
     
     func testPending() {

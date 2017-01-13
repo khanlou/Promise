@@ -185,7 +185,7 @@ public final class Promise<Value> {
     
     @discardableResult
     public func then(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> () = { _ in }) -> Promise<Value> {
-        return Promise<Value>(work: { fulfill, reject in
+        _ = Promise<Value>(work: { fulfill, reject in
             self.addCallbacks(
                 on: queue,
                 onFulfilled: { value in
@@ -198,6 +198,7 @@ public final class Promise<Value> {
                 }
             )
         })
+        return self
     }
     
     @discardableResult

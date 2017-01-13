@@ -35,7 +35,7 @@ class ExecutionContextTests: XCTestCase {
 
         let invalidatableQueue = InvalidatableQueue()
 
-        let promise = Promise(value: 5)
+        Promise(value: 5)
             .then(on: invalidatableQueue, { (_) -> Void in
                 XCTFail()
             })
@@ -47,8 +47,26 @@ class ExecutionContextTests: XCTestCase {
         })
 
         waitForExpectations(timeout: 1, handler: nil)
-        XCTAssert(promise.isPending)
-        
-        
+
     }
+
+    func testTapContinuesToFireInvalidatableQueue() {
+
+        weak var expectation = self.expectation(description: "A tapping `then` block on an invalidated queue shouldn't prevent future then blocks from firing.")
+
+        let invalidatableQueue = InvalidatableQueue()
+        invalidatableQueue.invalidate()
+
+        Promise(value: 5)
+            .then(on: invalidatableQueue, { (_) -> Void in
+                XCTFail()
+            })
+            .then({ _ in
+                expectation?.fulfill()
+            })
+
+        waitForExpectations(timeout: 1, handler: nil)
+
+    }
+
 }
