@@ -59,6 +59,9 @@ class ExecutionContextTests: XCTestCase {
 
         Promise(value: 5)
             .then(on: invalidatableQueue, { (_) -> Void in
+                if #available(iOS 10, *) {
+                    dispatchPrecondition(condition: .onQueue(.main))
+                }
                 XCTFail()
             })
             .then({ _ in
@@ -67,6 +70,27 @@ class ExecutionContextTests: XCTestCase {
 
         waitForExpectations(timeout: 1, handler: nil)
 
+    }
+
+    func testInvalidatableQueueSupportsNonMainQueues() {
+
+        weak var expectation = self.expectation(description: "Invalidatable queues should support non-main queues.")
+
+        let backgroundQueue = DispatchQueue(label: "testqueue")
+        let invalidatableQueue = InvalidatableQueue(queue: backgroundQueue)
+
+        Promise(value: 5)
+            .then(on: invalidatableQueue, { (_) -> Void in
+                if #available(iOS 10, *) {
+                    dispatchPrecondition(condition: .notOnQueue(.main))
+                }
+            })
+            .then({ _ in
+                expectation?.fulfill()
+            })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        
     }
 
 }
