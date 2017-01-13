@@ -9,11 +9,11 @@
 import Foundation
 
 public protocol ExecutionContext {
-    func async(_ work: @escaping () -> Void)
+    func execute(_ work: @escaping () -> Void)
 }
 
 extension DispatchQueue: ExecutionContext {
-    public func async(_ work: @escaping () -> Void) {
+    public func execute(_ work: @escaping () -> Void) {
         self.async(execute: work)
     }
 }
@@ -32,7 +32,7 @@ public final class InvalidatableQueue: ExecutionContext {
         valid = false
     }
 
-    public func async(_ work: @escaping () -> Void) {
+    public func execute(_ work: @escaping () -> Void) {
         guard valid else { return }
         self.queue.async(execute: work)
     }
@@ -45,13 +45,13 @@ struct Callback<Value> {
     let queue: ExecutionContext
     
     func callFulfill(_ value: Value) {
-        queue.async({
+        queue.execute({
             self.onFulfilled(value)
         })
     }
     
     func callReject(_ error: Error) {
-        queue.async({
+        queue.execute({
             self.onRejected(error)
         })
     }
