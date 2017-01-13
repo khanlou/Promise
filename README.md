@@ -168,6 +168,47 @@ These are some of the most useful behaviors, but there are others as well, like 
 
 You can find these behaviors in the [Promises+Extras.swift](https://github.com/khanlou/Promise/blob/master/Promise/Promise%2BExtras.swift) file.
 
+### Invalidatable Queues
+
+Each method on the `Promise` that accepts a block accepts an execution context with the parameter name `on:`. Usually, this execution context is a queue.
+
+```
+Promise<Void>(queue: .main, work: { fulfill, reject in
+    viewController.present(viewControllerToPresent, animated: flag, completion: {
+        fulfill()
+    })
+}).then(on: DispatchQueue.global(), {
+	return try Data(contentsOf: someURL)
+})
+```
+
+Because `ExecutionContext` is a protocol, other things can be passed here. One particularly useful one is `InvalidatableQueue`. When working with table cells, often the result of a promise needs to be ignored. To do this, each cell can hold on to an `InvalidatableQueue`. An `InvalidatableQueue` is an execution context that can be invalidated. If the context is invalidated, then the block that is passed to it will be discarded and not executed.
+
+To use this with table cells, the queue should be invalidated and reset on `prepareForReuse()`.
+
+```
+class SomeTableViewCell: UITableViewCell {
+    var invalidatableQueue = InvalidatableQueue()
+        
+    func showImage(at url: URL) {
+        ImageFetcher(url)
+            .fetch()
+            .then(on: invalidatableQueue, { image in
+                self.imageView.image = image
+            })
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        token.invalidate()
+        token = InvalidationToken()
+    }
+
+}
+```
+
+Warning: don't chain blocks off anything that is executing on an invalidatable queue. `then` blocks that return `Void` won't stop the chain, but `then` blocks that return values or promises _will_ stop the chain. Because the block can't be executed, the result of the next value in the chain won't be calculable, and the next promise will remain in the `pending` state forever, preventing resources from being released.
+
 ## Ease of Use
 
 I made several design decisions when writing this `Promise` library, erring towards making the library as easy to use as possible.
@@ -227,12 +268,11 @@ Promise<Void>(queue: .main, work: { fulfill, reject in
     viewController.present(viewControllerToPresent, animated: flag, completion: {
         fulfill()
     })
-}).then(on: .global(), {
+}).then(on: DispatchQueue.global(), {
 	return try Data(contentsOf: someURL)
-}).then(on: .main, {
+}).then(on: DispatchQueue.main, {
 	self.data = data
 })
-
 ```
 
 ## Playing Around
