@@ -31,7 +31,7 @@ class ExecutionContextTests: XCTestCase {
 
     func testInvalidatedInvalidatableQueue() {
 
-        weak var expectation = self.expectation(description: "An InvalidatableQueue that hasn't been invalidated should execute its block.")
+        weak var expectation = self.expectation(description: "An InvalidatableQueue that has been invalidated shouldn't execute its block.")
 
         let invalidatableQueue = InvalidatableQueue()
 
