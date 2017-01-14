@@ -77,7 +77,7 @@ To catch any errors that are created along the way, you can add a `catch` block 
 
 If any step in the chain fails, no more `then` blocks will be executed. Only failure blocks are executed. This is enforced in the type system as well. If the `fetchUsers()` promise fails (for example, because of a lack of internet), there's no way for the promise to construct a valid value for the `users` variable, and there's no way that block could be called.
 
-## Creating Promise
+## Creating Promises
 
 To create a promise, there is a convenience initializer that takes a block and provides functions to `fulfill` or `reject` the promise:
 
@@ -105,7 +105,9 @@ let promise = Promise<(Data, HTTPURLResponse)>(work: { fulfill, reject in
 })
 ```
 
-For delegate-based APIs, you can can create a promise in the `.pending` state with the default initializer. If the API that you're wrapping is sensitive to which thread it's being run on, like any UIKit code, be sure to pass add a `queue: .main` parameter to the `work:` initializer, and it will be executed on the main queue.
+If the API that you're wrapping is sensitive to which thread it's being run on, like any UIKit code, be sure to pass add a `queue: .main` parameter to the `work:` initializer, and it will be executed on the main queue.
+
+For delegate-based APIs, you can can create a promise in the `.pending` state with the default initializer.
 
 ```
 let promise = Promise()
