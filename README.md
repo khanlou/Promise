@@ -113,7 +113,7 @@ For delegate-based APIs, you can can create a promise in the `.pending` state wi
 let promise = Promise()
 ```
 
-and use the `fulfill` and `reject` instance methods to change it's state. 
+and use the `fulfill` and `reject` instance methods to change its state. 
 
 ## Advanced Usage
 
