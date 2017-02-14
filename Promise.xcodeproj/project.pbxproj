@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A0073681E2865CC00EB319A /* ExecutionContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */; };
 		1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */; };
 		1A2A8CF81D5D58A800421E3E /* PromiseRaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF71D5D58A800421E3E /* PromiseRaceTests.swift */; };
 		1A2A8CFA1D5D717D00421E3E /* PromiseAlwaysTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF91D5D717D00421E3E /* PromiseAlwaysTests.swift */; };
@@ -36,6 +37,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionContextTests.swift; sourceTree = "<group>"; };
 		1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseDelayTests.swift; sourceTree = "<group>"; };
 		1A2A8CF71D5D58A800421E3E /* PromiseRaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRaceTests.swift; sourceTree = "<group>"; };
 		1A2A8CF91D5D717D00421E3E /* PromiseAlwaysTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseAlwaysTests.swift; sourceTree = "<group>"; };
@@ -123,6 +125,7 @@
 				1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */,
 				1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */,
 				72B61D3B1E00E5830008E829 /* Wrench.swift */,
+				1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */,
 			);
 			path = PromiseTests;
 			sourceTree = "<group>";
@@ -245,6 +248,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1A0073681E2865CC00EB319A /* ExecutionContextTests.swift in Sources */,
 				1A2A8CFC1D5D743100421E3E /* PromiseRecoverTests.swift in Sources */,
 				1A2A8CFA1D5D717D00421E3E /* PromiseAlwaysTests.swift in Sources */,
 				1A2A8CFE1D5D764600421E3E /* PromiseRetryTests.swift in Sources */,

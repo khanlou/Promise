@@ -21,6 +21,7 @@ Promises are suited for any asynchronous action that can succeed or fail exactly
 ## Basic Usage
 
 To access the value once it arrives, you call the `then` method with a block.
+
 ```swift
 let usersPromise = fetchUsers() // Promise<[User]>
 usersPromise.then({ users in
@@ -30,6 +31,7 @@ usersPromise.then({ users in
 All usage of the data in the `users` Promise is gated through the `then` method.
 
 In addition to performing side effects (like setting the `users` instance variable on `self`), `then` enables you do two other things. First, you can transform the contents of the Promise, and second, you can kick off another Promise, to do more asynchronous work. To do either of these things, return something from the block you pass to `then`. Each time you call `then`, the existing Promise will return a new Promise.
+
 ```swift
 let usersPromise = fetchUsers() // Promise<[User]>
 let firstUserPromise = usersPromise.then({ users in // Promise<User>
@@ -47,6 +49,7 @@ Based on whether you return a regular value or a promise, the `Promise` will det
 As long as the block you pass to `then` is one line long, its type signature will be inferred, which will make Promises much easier to read and work with.
 
 Since each call to `then` returns a new `Promise`, you can write them in a big chain. The code above, as a chain, would be written:
+
 ```swift
 fetchUsers()
     .then({ users in
@@ -60,6 +63,7 @@ fetchUsers()
     })
 ```
 To catch any errors that are created along the way, you can add a `catch` block as well:
+
 ```swift
 fetchUsers()
     .then({ users in
@@ -122,6 +126,7 @@ Because promises formalize how success and failure blocks look, it's possible to
 ### `always`
 
 For example, if you want to execute code when the promise fulfills — regardless of whether it succeeds or fails – you can use `always`.
+
 ```swift
 activityIndicator.startAnimating()
 fetchUsers()
@@ -137,6 +142,7 @@ Even if the network request fails, the activity indicator will stop. Note that t
 ### `all`
 
 `Promise.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values. For example, you might want to write code to hit an API endpoint once for each item in an array. `map` and `Promise.all` make that super easy:
+
 ```swift
 let userPromises = users.map({ user in
     APIClient.followUser(user)
@@ -152,6 +158,7 @@ Promise<()>.all(userPromises)
 ### `ensure`
 
 `ensure` is a method that takes a predicate, and rejects the promise chain if that predicate fails.
+
 ```swift
 URLSession.shared.dataTask(with: request)
     .ensure({ data, httpResponse in
@@ -169,6 +176,47 @@ URLSession.shared.dataTask(with: request)
 These are some of the most useful behaviors, but there are others as well, like `race` (which races multiple promises), `retry` (which lets you retry a single promise multiple times), and `recover` (which lets you return a new `Promise` given an error, allowing you to recover from failure), and others.
 
 You can find these behaviors in the [Promises+Extras.swift](https://github.com/khanlou/Promise/blob/master/Promise/Promise%2BExtras.swift) file.
+
+### Invalidatable Queues
+
+Each method on the `Promise` that accepts a block accepts an execution context with the parameter name `on:`. Usually, this execution context is a queue.
+
+```
+Promise<Void>(queue: .main, work: { fulfill, reject in
+    viewController.present(viewControllerToPresent, animated: flag, completion: {
+        fulfill()
+    })
+}).then(on: DispatchQueue.global(), {
+	return try Data(contentsOf: someURL)
+})
+```
+
+Because `ExecutionContext` is a protocol, other things can be passed here. One particularly useful one is `InvalidatableQueue`. When working with table cells, often the result of a promise needs to be ignored. To do this, each cell can hold on to an `InvalidatableQueue`. An `InvalidatableQueue` is an execution context that can be invalidated. If the context is invalidated, then the block that is passed to it will be discarded and not executed.
+
+To use this with table cells, the queue should be invalidated and reset on `prepareForReuse()`.
+
+```
+class SomeTableViewCell: UITableViewCell {
+    var invalidatableQueue = InvalidatableQueue()
+        
+    func showImage(at url: URL) {
+        ImageFetcher(url)
+            .fetch()
+            .then(on: invalidatableQueue, { image in
+                self.imageView.image = image
+            })
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        token.invalidate()
+        token = InvalidationToken()
+    }
+
+}
+```
+
+Warning: don't chain blocks off anything that is executing on an invalidatable queue. `then` blocks that return `Void` won't stop the chain, but `then` blocks that return values or promises _will_ stop the chain. Because the block can't be executed, the result of the next value in the chain won't be calculable, and the next promise will remain in the `pending` state forever, preventing resources from being released.
 
 ## Ease of Use
 
@@ -189,6 +237,7 @@ Also note that Swift's built-in error handling system doesn't have typed errors,
 ### Throwing
 
 Lastly, you can use `try` and `throw` from within all the blocks, and the library will automatically translate it to a promise rejection. This makes working with APIs that throw much more easily. To extend our `URLSession` example, we can use the throwing JSONSerialization API easily.
+
 ```swift
 URLSession.shared.dataTask(with: request)
     .ensure({ data, httpResponse in httpResponse.statusCode == 200 })
@@ -200,6 +249,7 @@ URLSession.shared.dataTask(with: request)
     })
 ```
 Working with optionals can be made simpler with a little extension.
+
 ```swift
 struct NilError: Error { }
 
@@ -213,6 +263,7 @@ extension Optional {
 }
 ```
 Because you're in an environment where you can freely throw and it will be handled for you (in the form of a rejected Promise), you can now easily unwrap optionals. For example, if you need a specific key out of a json dictionary:
+
 ```swift
 .then({ json in
     return try (json["user"] as? [String: Any]).unwrap()
@@ -225,14 +276,14 @@ And you will transform your optional into a non-optional.
 The threading model for this library is dead simple. `init(work:)` happens on a background queue by default, and every other block-based method (`then`, `catch`, `always`, etc) executes on the main thread. These can be overridden by passing in a `DispatchQueue` object for the first parameter.
 
 ```swift
-Promise<Void>(queue: .main, work: { fulfill, reject in
+Promise<Void>(work: { fulfill, reject in
     viewController.present(viewControllerToPresent, animated: flag, completion: {
         fulfill()
     })
-}).then(on: .global(), {
-    return try Data(contentsOf: someURL)
-}).then(on: .main, {
-    self.data = data
+}).then(on: DispatchQueue.global(), {
+	return try Data(contentsOf: someURL)
+}).then(on: DispatchQueue.main, {
+	self.data = data
 })
 ```
 
