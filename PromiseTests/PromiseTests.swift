@@ -39,7 +39,7 @@ class PromiseTests: XCTestCase {
         })
         waitForExpectations(timeout: 1, handler: nil)
     }
-    
+
     func testAsyncThrowing() {
         weak var expectation = self.expectation(description: "The `work:` based constructor of Promise should work correctly.")
         
@@ -223,7 +223,19 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual(promise.value, 6)
         XCTAssert(promise.isFulfilled)
     }
-    
+
+    func testZalgoContained() {
+        weak var expectation = self.expectation(description: "")
+
+        var called = false
+        Promise(value: "asdf").then({ string in
+            XCTAssert(called)
+            expectation?.fulfill()
+        })
+        called = true
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
     func testDoubleResolve() {
         let promise = Promise<String>()
         promise.fulfill("correct")
