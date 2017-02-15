@@ -14,15 +14,15 @@
 		1A2A8CFC1D5D743100421E3E /* PromiseRecoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CFB1D5D743100421E3E /* PromiseRecoverTests.swift */; };
 		1A2A8CFE1D5D764600421E3E /* PromiseRetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */; };
 		1A7CC22F1DF4D37400929E7C /* PromiseEnsureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */; };
-		1AE9F56F1D526F8A00185453 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */; };
 		1AF54F3B1D67D60000557CCB /* PromiseZipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */; };
 		1AFA1FA01D8A0C9500E4F76E /* PromiseThrowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */; };
 		1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80F91D5166C000C55D5A /* delay.swift */; };
 		1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */; };
+		2648083B1E54221900F01140 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264808391E54221900F01140 /* Promise.swift */; };
+		2648083C1E54221900F01140 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2648083A1E54221900F01140 /* Promise+Extras.swift */; };
 		3454F9D21D4FACD000985BBF /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 3454F9D11D4FACD000985BBF /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3454F9CE1D4FACD000985BBF /* Promise.framework */; };
 		3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9DD1D4FACD000985BBF /* PromiseTests.swift */; };
-		3454F9E91D4FACFB00985BBF /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9E81D4FACFB00985BBF /* Promise.swift */; };
 		72B61D3C1E00E5830008E829 /* Wrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B61D3B1E00E5830008E829 /* Wrench.swift */; };
 /* End PBXBuildFile section */
 
@@ -44,18 +44,18 @@
 		1A2A8CFB1D5D743100421E3E /* PromiseRecoverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRecoverTests.swift; sourceTree = "<group>"; };
 		1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRetryTests.swift; sourceTree = "<group>"; };
 		1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseEnsureTests.swift; sourceTree = "<group>"; };
-		1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Promise+Extras.swift"; sourceTree = "<group>"; };
 		1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseZipTests.swift; sourceTree = "<group>"; };
 		1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseThrowsTests.swift; sourceTree = "<group>"; };
 		1AFF80F91D5166C000C55D5A /* delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delay.swift; sourceTree = "<group>"; };
 		1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseAllTests.swift; sourceTree = "<group>"; };
+		264808391E54221900F01140 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = SOURCE_ROOT; };
+		2648083A1E54221900F01140 /* Promise+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Extras.swift"; path = "Sources/Promise+Extras.swift"; sourceTree = SOURCE_ROOT; };
 		3454F9CE1D4FACD000985BBF /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3454F9D11D4FACD000985BBF /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Promise.h; sourceTree = "<group>"; };
 		3454F9D31D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3454F9D81D4FACD000985BBF /* PromiseTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromiseTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3454F9DD1D4FACD000985BBF /* PromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
 		3454F9DF1D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3454F9E81D4FACFB00985BBF /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
 		72B61D3B1E00E5830008E829 /* Wrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wrench.swift; sourceTree = "<group>"; };
 		76E25E381D8483D0000A58DF /* Promise.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Promise.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -101,9 +101,9 @@
 		3454F9D01D4FACD000985BBF /* Promise */ = {
 			isa = PBXGroup;
 			children = (
+				264808391E54221900F01140 /* Promise.swift */,
+				2648083A1E54221900F01140 /* Promise+Extras.swift */,
 				3454F9D11D4FACD000985BBF /* Promise.h */,
-				3454F9E81D4FACFB00985BBF /* Promise.swift */,
-				1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */,
 				3454F9D31D4FACD000985BBF /* Info.plist */,
 			);
 			path = Promise;
@@ -191,7 +191,7 @@
 				TargetAttributes = {
 					3454F9CD1D4FACD000985BBF = {
 						CreatedOnToolsVersion = 7.3.1;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0820;
 					};
 					3454F9D71D4FACD000985BBF = {
 						CreatedOnToolsVersion = 7.3.1;
@@ -239,8 +239,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1AE9F56F1D526F8A00185453 /* Promise+Extras.swift in Sources */,
-				3454F9E91D4FACFB00985BBF /* Promise.swift in Sources */,
+				2648083C1E54221900F01140 /* Promise+Extras.swift in Sources */,
+				2648083B1E54221900F01140 /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +411,7 @@
 		3454F9E61D4FACD000985BBF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = PromiseTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.PromiseTests;
@@ -422,6 +423,7 @@
 		3454F9E71D4FACD000985BBF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				INFOPLIST_FILE = PromiseTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.PromiseTests;
