@@ -3,5 +3,6 @@
     <pages>
         <page name='Basic Usage'/>
         <page name='Common Patterns'/>
+        <page name='Zip Functions Generator'/>
     </pages>
 </playground>
