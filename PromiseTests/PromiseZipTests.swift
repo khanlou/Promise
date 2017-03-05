@@ -13,11 +13,11 @@ import Promise
 
 class PromiseZipTests: XCTestCase {
     func testZipping2() {
-        weak var expectation = self.expectation(description: "`Promise.zip` should be type safe.")
-        
+        weak var expectation = self.expectation(description: "`Promises.zip` should be type safe.")
+
         let promise = Promise(value: 2)
         let promise2 = Promise(value: "some string")
-        let zipped = Promise<()>.zip(promise, and: promise2)
+        let zipped = Promises.zip(promise, promise2)
         zipped.always({
             expectation?.fulfill()
         })

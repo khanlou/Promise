@@ -104,8 +104,15 @@ extension Promise {
             }).then(fulfill).catch(reject)
         })
     }
-        
+
+    @available(*, deprecated, message: "Use Promises.zip instead")
     public static func zip<T, U>(_ first: Promise<T>, and second: Promise<U>) -> Promise<(T, U)> {
+        return Promises.zip(first, second)
+    }
+}
+
+public enum Promises {
+    public static func zip<T, U>(_ first: Promise<T>, _ second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
             let resolver: (Any) -> () = { _ in
                 if let firstValue = first.value, let secondValue = second.value {
