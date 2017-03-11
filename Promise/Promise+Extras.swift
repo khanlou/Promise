@@ -104,8 +104,15 @@ extension Promise {
             }).then(fulfill).catch(reject)
         })
     }
-        
+
+    @available(*, deprecated, message: "Use Promises.zip instead")
     public static func zip<T, U>(_ first: Promise<T>, and second: Promise<U>) -> Promise<(T, U)> {
+        return Promises.zip(first, second)
+    }
+}
+
+public enum Promises {
+    public static func zip<T, U>(_ first: Promise<T>, _ second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
             let resolver: (Any) -> () = { _ in
                 if let firstValue = first.value, let secondValue = second.value {
@@ -114,6 +121,42 @@ extension Promise {
             }
             first.then(resolver, reject)
             second.then(resolver, reject)
+        })
+    }
+
+    // The following zip functions have been created with the 
+    // "Zip Functions Generator" playground page. If you need variants with
+    // more parameters, use it to generate them.
+
+    /// Zips 3 promises of different types into a single Promise whose
+    /// type is a tuple of 3 elements.
+    public static func zip<T1, T2, T3>(_ p1: Promise<T1>, _ p2: Promise<T2>, _ last: Promise<T3>) -> Promise<(T1, T2, T3)> {
+        return Promise<(T1, T2, T3)>(work: { (fulfill: @escaping ((T1, T2, T3)) -> Void, reject: @escaping (Error) -> Void) in
+            let zipped: Promise<(T1, T2)> = zip(p1, p2)
+
+            func resolver() -> Void {
+                if let zippedValue = zipped.value, let lastValue = last.value {
+                    fulfill((zippedValue.0, zippedValue.1, lastValue))
+                }
+            }
+            zipped.then({ _ in resolver() }, reject)
+            last.then({ _ in resolver() }, reject)
+        })
+    }
+
+    /// Zips 4 promises of different types into a single Promise whose
+    /// type is a tuple of 4 elements.
+    public static func zip<T1, T2, T3, T4>(_ p1: Promise<T1>, _ p2: Promise<T2>, _ p3: Promise<T3>, _ last: Promise<T4>) -> Promise<(T1, T2, T3, T4)> {
+        return Promise<(T1, T2, T3, T4)>(work: { (fulfill: @escaping ((T1, T2, T3, T4)) -> Void, reject: @escaping (Error) -> Void) in
+            let zipped: Promise<(T1, T2, T3)> = zip(p1, p2, p3)
+
+            func resolver() -> Void {
+                if let zippedValue = zipped.value, let lastValue = last.value {
+                    fulfill((zippedValue.0, zippedValue.1, zippedValue.2, lastValue))
+                }
+            }
+            zipped.then({ _ in resolver() }, reject)
+            last.then({ _ in resolver() }, reject)
         })
     }
 }
