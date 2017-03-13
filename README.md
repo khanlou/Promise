@@ -181,7 +181,7 @@ You can find these behaviors in the [Promises+Extras.swift](https://github.com/k
 
 Each method on the `Promise` that accepts a block accepts an execution context with the parameter name `on:`. Usually, this execution context is a queue.
 
-```
+```swift
 Promise<Void>(queue: .main, work: { fulfill, reject in
     viewController.present(viewControllerToPresent, animated: flag, completion: {
         fulfill()
@@ -195,7 +195,7 @@ Because `ExecutionContext` is a protocol, other things can be passed here. One p
 
 To use this with table cells, the queue should be invalidated and reset on `prepareForReuse()`.
 
-```
+```swift
 class SomeTableViewCell: UITableViewCell {
     var invalidatableQueue = InvalidatableQueue()
         
