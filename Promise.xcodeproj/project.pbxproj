@@ -23,6 +23,9 @@
 		3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3454F9CE1D4FACD000985BBF /* Promise.framework */; };
 		3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9DD1D4FACD000985BBF /* PromiseTests.swift */; };
 		3454F9E91D4FACFB00985BBF /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9E81D4FACFB00985BBF /* Promise.swift */; };
+		52F3C1BE1ECE503D0028CA53 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AE9F56E1D526F8A00185453 /* Promise+Extras.swift */; };
+		52F3C1BF1ECE503D0028CA53 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9E81D4FACFB00985BBF /* Promise.swift */; };
+		52F3C1C21ECE503D0028CA53 /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 3454F9D11D4FACD000985BBF /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		72B61D3C1E00E5830008E829 /* Wrench.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72B61D3B1E00E5830008E829 /* Wrench.swift */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +59,7 @@
 		3454F9DD1D4FACD000985BBF /* PromiseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
 		3454F9DF1D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3454F9E81D4FACFB00985BBF /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		52F3C1C71ECE503D0028CA53 /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		72B61D3B1E00E5830008E829 /* Wrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wrench.swift; sourceTree = "<group>"; };
 		76E25E381D8483D0000A58DF /* Promise.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Promise.playground; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +77,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52F3C1C01ECE503D0028CA53 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -94,6 +105,7 @@
 			children = (
 				3454F9CE1D4FACD000985BBF /* Promise.framework */,
 				3454F9D81D4FACD000985BBF /* PromiseTests.xctest */,
+				52F3C1C71ECE503D0028CA53 /* Promise.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,6 +153,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		52F3C1C11ECE503D0028CA53 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52F3C1C21ECE503D0028CA53 /* Promise.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
@@ -180,6 +200,24 @@
 			productReference = 3454F9D81D4FACD000985BBF /* PromiseTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		52F3C1BC1ECE503D0028CA53 /* Promise Mac */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 52F3C1C41ECE503D0028CA53 /* Build configuration list for PBXNativeTarget "Promise Mac" */;
+			buildPhases = (
+				52F3C1BD1ECE503D0028CA53 /* Sources */,
+				52F3C1C01ECE503D0028CA53 /* Frameworks */,
+				52F3C1C11ECE503D0028CA53 /* Headers */,
+				52F3C1C31ECE503D0028CA53 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Promise Mac";
+			productName = Promise;
+			productReference = 52F3C1C71ECE503D0028CA53 /* Promise.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -212,6 +250,7 @@
 			projectRoot = "";
 			targets = (
 				3454F9CD1D4FACD000985BBF /* Promise */,
+				52F3C1BC1ECE503D0028CA53 /* Promise Mac */,
 				3454F9D71D4FACD000985BBF /* PromiseTests */,
 			);
 		};
@@ -226,6 +265,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3454F9D61D4FACD000985BBF /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52F3C1C31ECE503D0028CA53 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -261,6 +307,15 @@
 				3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */,
 				1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */,
 				1A7CC22F1DF4D37400929E7C /* PromiseEnsureTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		52F3C1BD1ECE503D0028CA53 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				52F3C1BE1ECE503D0028CA53 /* Promise+Extras.swift in Sources */,
+				52F3C1BF1ECE503D0028CA53 /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +486,46 @@
 			};
 			name = Release;
 		};
+		52F3C1C51ECE503D0028CA53 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Promise/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.Promise;
+				PRODUCT_NAME = Promise;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		52F3C1C61ECE503D0028CA53 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Promise/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.Promise;
+				PRODUCT_NAME = Promise;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -457,6 +552,15 @@
 			buildConfigurations = (
 				3454F9E61D4FACD000985BBF /* Debug */,
 				3454F9E71D4FACD000985BBF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		52F3C1C41ECE503D0028CA53 /* Build configuration list for PBXNativeTarget "Promise Mac" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				52F3C1C51ECE503D0028CA53 /* Debug */,
+				52F3C1C61ECE503D0028CA53 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
