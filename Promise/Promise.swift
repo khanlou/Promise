@@ -206,6 +206,11 @@ public final class Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
+    @discardableResult
+    public func always(on queue: DispatchQueue = .main, _ onComplete: @escaping () -> ()) -> Promise<Value> {
+        return then(on: queue, { _ in onComplete() }, { _ in onComplete() })
+    }
+    
     public func reject(_ error: Error) {
         updateState(.rejected(error: error))
     }
