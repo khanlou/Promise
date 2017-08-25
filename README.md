@@ -209,8 +209,8 @@ class SomeTableViewCell: UITableViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        token.invalidate()
-        token = InvalidationToken()
+        invalidatableQueue.invalidate()
+        invalidatableQueue = InvalidatableQueue()
     }
 
 }
