@@ -71,6 +71,18 @@ public enum Promises {
         })
     }
 
+//    public static func kickoff<T>(_ block: @escaping () throws -> Promise<T>) -> Promise<T> {
+//        return Promise(value: ()).then(block)
+//    }
+
+    public static func kickoff<T>(_ block: @escaping () throws -> T) -> Promise<T> {
+        do {
+            return try Promise(value: block())
+        } catch {
+            return Promise(error: error)
+        }
+    }
+
     public static func zip<T, U>(_ first: Promise<T>, _ second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
             let resolver: (Any) -> () = { _ in
