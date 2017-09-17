@@ -139,22 +139,6 @@ fetchUsers()
 ```
 Even if the network request fails, the activity indicator will stop. Note that the block that you pass to `always` has no parameters. Because the `Promise` doesn't know if it will succeed or fail, it will give you neither a value nor an error.
 
-### `all`
-
-`Promise.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values. For example, you might want to write code to hit an API endpoint once for each item in an array. `map` and `Promise.all` make that super easy:
-
-```swift
-let userPromises = users.map({ user in
-    APIClient.followUser(user)
-})
-Promise<()>.all(userPromises)
-    .then({
-        //all the users are now followed!
-    })
-    .catch  ({ error in
-        //one of the API requests failed
-    })
-```
 ### `ensure`
 
 `ensure` is a method that takes a predicate, and rejects the promise chain if that predicate fails.
@@ -171,7 +155,48 @@ URLSession.shared.dataTask(with: request)
         // the network request failed, or the status code was invalid
     })
 ```
-### Others
+
+## Static methods
+
+Static methods, like `zip`, `race`, `retry`, `all`, `kickoff` live in a namespace called `Promises`. Previously, they were static functions in the `Promise` class, but this meant that you had to specialize them with a generic before you could use them, like `Promise<()>.all`. This is ugly and hard to type, so as of v2.0, you now write `Promises.all`.
+
+### `all`
+
+`Promises.all` is a static method that waits for all the promises you give it to fulfill, and once they have, it fulfills itself with the array of all fulfilled values. For example, you might want to write code to hit an API endpoint once for each item in an array. `map` and `Promises.all` make that super easy:
+
+```swift
+let userPromises = users.map({ user in
+    APIClient.followUser(user)
+})
+Promises.all(userPromises)
+    .then({
+        //all the users are now followed!
+    })
+    .catch  ({ error in
+        //one of the API requests failed
+    })
+```
+
+### `kickoff`
+
+Because the `then` blocks of promises are a safe space for functions that `throw`, its sometimes useful to enter those safe spaces even if you don't have asynchronous work to do. `Promises.kickoff` is designed for that.
+
+```swift
+Promises
+	.kickoff({
+		return try initialValueFromThrowingFunction()
+	})
+	.then({ value in
+		//use the value from the throwing function
+	})
+	.catch({ error in
+		//if there was an error, you can handle it here.
+	})
+```
+
+This (coupled with `Optional.unrwap()`) is particularly useful when you want to start a promise chain from an optional value. 
+
+## Others behaviors
 
 These are some of the most useful behaviors, but there are others as well, like `race` (which races multiple promises), `retry` (which lets you retry a single promise multiple times), and `recover` (which lets you return a new `Promise` given an error, allowing you to recover from failure), and others.
 
