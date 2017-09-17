@@ -13,8 +13,8 @@ struct PromiseCheckError: Error { }
 extension Promise {
     /// Wait for all the promises you give it to fulfill, and once they have, fulfill itself
     /// with the array of all fulfilled values.
-    public static func all<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
-        return Promise<[T]>(work: { fulfill, reject in
+    public static func all(_ promises: [Promise<Value>]) -> Promise<[Value]> {
+        return Promise<[Value]>(work: { fulfill, reject in
             guard !promises.isEmpty else { fulfill([]); return }
             for promise in promises {
                 promise.then({ value in
