@@ -28,6 +28,7 @@ usersPromise.then({ users in
     self.users = users
 })
 ```
+
 All usage of the data in the `users` Promise is gated through the `then` method.
 
 In addition to performing side effects (like setting the `users` instance variable on `self`), `then` enables you do two other things. First, you can transform the contents of the Promise, and second, you can kick off another Promise, to do more asynchronous work. To do either of these things, return something from the block you pass to `then`. Each time you call `then`, the existing Promise will return a new Promise.
@@ -44,6 +45,7 @@ followersPromise.then({ followers in
     self.followers = followers
 })
 ```
+
 Based on whether you return a regular value or a promise, the `Promise` will determine whether it should transform the internal contents, or fire off the next promise and await its results.
 
 As long as the block you pass to `then` is one line long, its type signature will be inferred, which will make Promises much easier to read and work with.
@@ -62,6 +64,7 @@ fetchUsers()
         self.followers = followers
     })
 ```
+
 To catch any errors that are created along the way, you can add a `catch` block as well:
 
 ```swift
@@ -79,6 +82,7 @@ fetchUsers()
         displayError(error)
     })
 ```
+
 If any step in the chain fails, no more `then` blocks will be executed. Only failure blocks are executed. This is enforced in the type system as well. If the `fetchUsers()` promise fails (for example, because of a lack of internet), there's no way for the promise to construct a valid value for the `users` variable, and there's no way that block could be called.
 
 ## Creating Promises
@@ -137,6 +141,7 @@ fetchUsers()
         self.activityIndicator.stopAnimating()
     })
 ```
+
 Even if the network request fails, the activity indicator will stop. Note that the block that you pass to `always` has no parameters. Because the `Promise` doesn't know if it will succeed or fail, it will give you neither a value nor an error.
 
 ### `ensure`
@@ -273,6 +278,7 @@ URLSession.shared.dataTask(with: request)
         // use the json
     })
 ```
+
 Working with optionals can be made simpler with a little extension.
 
 ```swift
@@ -287,6 +293,7 @@ extension Optional {
     }
 }
 ```
+
 Because you're in an environment where you can freely throw and it will be handled for you (in the form of a rejected Promise), you can now easily unwrap optionals. For example, if you need a specific key out of a json dictionary:
 
 ```swift
@@ -294,6 +301,7 @@ Because you're in an environment where you can freely throw and it will be handl
     return try (json["user"] as? [String: Any]).unwrap()
 })
 ```
+
 And you will transform your optional into a non-optional.
 
 ### Threading Model
