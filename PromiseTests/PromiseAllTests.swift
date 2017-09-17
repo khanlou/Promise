@@ -30,7 +30,7 @@ class PromiseAllTests: XCTestCase {
             }
         })
         
-        let final = Promise.all([promise1, promise2, promise3, promise4])
+        let final = Promises.all([promise1, promise2, promise3, promise4])
         
         final.then({ _ in
             expectation?.fulfill()
@@ -49,7 +49,7 @@ class PromiseAllTests: XCTestCase {
         let promise2 = Promise(value: 2)
         let promise3 = Promise(value: 3)
         
-        let final = Promise.all([promise1, promise2, promise3])
+        let final = Promises.all([promise1, promise2, promise3])
         
         final.then({ _ in
             expectation?.fulfill()
@@ -65,7 +65,7 @@ class PromiseAllTests: XCTestCase {
         weak var expectation = self.expectation(description: "`Promise.all` should wait until multiple promises are fulfilled before returning.")
         
         
-        let final: Promise<[Int]> = Promise.all([])
+        let final: Promise<[Int]> = Promises.all([])
         final.always({
             expectation?.fulfill()
         })
@@ -89,7 +89,7 @@ class PromiseAllTests: XCTestCase {
             }
         })
         
-        let final = Promise.all([promise1, promise2])
+        let final = Promises.all([promise1, promise2])
         
         final.then({ _ in
             XCTFail()
@@ -126,7 +126,7 @@ class PromiseAllTests: XCTestCase {
             }
         })
         
-        let final = Promise.all([promise1, promise2])
+        let final = Promises.all([promise1, promise2])
         
         final.then({ _ in
             XCTFail()

@@ -14,7 +14,7 @@ class PromiseRetryTests: XCTestCase {
         weak var expectation = self.expectation(description: "`Promise.retry` should retry and eventually succeed.")
         
         var currentCount = 3
-        let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
+        let promise = Promises.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
             if currentCount == 1 {
                 return Promise(value: 8)
             }
@@ -33,7 +33,7 @@ class PromiseRetryTests: XCTestCase {
         weak var expectation = self.expectation(description: "`Promise.retry` should never retry if it succeeds immediately.")
         
         var currentCount = 1
-        let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
+        let promise = Promises.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
             if currentCount == 0 {
                 XCTFail()
             }
@@ -51,7 +51,7 @@ class PromiseRetryTests: XCTestCase {
     func testRetryWithNeverSuccess() {
         weak var expectation = self.expectation(description: "`Promise.retry` should never retry if it succeeds immediately.")
         
-        let promise = Promise<Int>.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
+        let promise = Promises.retry(count: 3, delay: 0, generate: { () -> Promise<Int> in
             return Promise(error: SimpleError())
         }).always({
             expectation?.fulfill()

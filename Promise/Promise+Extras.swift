@@ -10,11 +10,11 @@ import Foundation
 
 struct PromiseCheckError: Error { }
 
-extension Promise {
+public enum Promises {
     /// Wait for all the promises you give it to fulfill, and once they have, fulfill itself
     /// with the array of all fulfilled values.
-    public static func all(_ promises: [Promise<Value>]) -> Promise<[Value]> {
-        return Promise<[Value]>(work: { fulfill, reject in
+    public static func all<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
+        return Promise<[T]>(work: { fulfill, reject in
             guard !promises.isEmpty else { fulfill([]); return }
             for promise in promises {
                 promise.then({ value in
@@ -57,40 +57,6 @@ extension Promise {
             }
         })
     }
-    public func addTimeout(_ timeout: TimeInterval) -> Promise<Value> {
-        return Promise.race(Array([self, Promise<Value>.timeout(timeout)]))
-    }
-
-    @discardableResult
-    public func always(on queue: ExecutionContext = DispatchQueue.main, _ onComplete: @escaping () -> ()) -> Promise<Value> {
-        return then(on: queue, { _ in
-            onComplete()
-            }, { _ in
-                onComplete()
-        })
-    }
-    
-    public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
-        return Promise(work: { fulfill, reject in
-            self.then(fulfill).catch({ error in
-                do {
-                    try recovery(error).then(fulfill, reject)
-                } catch (let error) {
-                    reject(error)
-                }
-            })
-        })
-    }
-
-    public func ensure(_ check: @escaping (Value) -> Bool) -> Promise<Value> {
-        return self.then({ (value: Value) -> Value in
-            guard check(value) else {
-                throw PromiseCheckError()
-            }
-            return value
-        })
-    }
-
 
     public static func retry<T>(count: Int, delay: TimeInterval, generate: @escaping () -> Promise<T>) -> Promise<T> {
         if count <= 0 {
@@ -105,13 +71,6 @@ extension Promise {
         })
     }
 
-    @available(*, deprecated, message: "Use Promises.zip instead")
-    public static func zip<T, U>(_ first: Promise<T>, and second: Promise<U>) -> Promise<(T, U)> {
-        return Promises.zip(first, second)
-    }
-}
-
-public enum Promises {
     public static func zip<T, U>(_ first: Promise<T>, _ second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
             let resolver: (Any) -> () = { _ in
@@ -157,6 +116,42 @@ public enum Promises {
             }
             zipped.then({ _ in resolver() }, reject)
             last.then({ _ in resolver() }, reject)
+        })
+    }
+}
+
+extension Promise {
+    public func addTimeout(_ timeout: TimeInterval) -> Promise<Value> {
+        return Promises.race(Array([self, Promises.timeout(timeout)]))
+    }
+
+    @discardableResult
+    public func always(on queue: ExecutionContext = DispatchQueue.main, _ onComplete: @escaping () -> ()) -> Promise<Value> {
+        return then(on: queue, { _ in
+            onComplete()
+        }, { _ in
+            onComplete()
+        })
+    }
+
+    public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
+        return Promise(work: { fulfill, reject in
+            self.then(fulfill).catch({ error in
+                do {
+                    try recovery(error).then(fulfill, reject)
+                } catch (let error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    public func ensure(_ check: @escaping (Value) -> Bool) -> Promise<Value> {
+        return self.then({ (value: Value) -> Value in
+            guard check(value) else {
+                throw PromiseCheckError()
+            }
+            return value
         })
     }
 }
