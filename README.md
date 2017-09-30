@@ -18,41 +18,6 @@ Using a special type to represent values that will exist in the future means tha
 
 Promises are suited for any asynchronous action that can succeed or fail exactly once, such as HTTP requests. If there is an asynchronous action that can "succeed" more than once, or delivers a series of values over time instead of just one, take a look at [Signals](https://github.com/JensRavens/Interstellar/) or [Observables](https://github.com/ReactiveX/RxSwift).
 
-## Installation
-
-### [CocoaPods](http://cocoapods.org/)
-
-1. Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
-
-    ```rb
-    pod 'Promise'
-    ```
-
-2. Integrate your dependencies using frameworks: add `use_frameworks!` to your Podfile. 
-3. Run `pod install`.
-
-### [Carthage](https://github.com/Carthage/Carthage)
-
-1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile):
-
-    ```
-    github "khanlou/Promise"
-    ```
-
-2. Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
-
-### [Swift Package Manager](https://swift.org/package-manager/)
-
-The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Promise does support its use on supported platforms.
-
-Once you have your Swift package set up, adding AlamPromiseofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
-
-```swift
-dependencies: [
-    .Package(url: "https://github.com/khanlou/Promise.git", majorVersion: 2)
-]
-```
-
 ## Basic Usage
 
 To access the value once it arrives, you call the `then` method with a block.
@@ -321,6 +286,41 @@ Promise<Void>(work: { fulfill, reject in
 }).then(on: DispatchQueue.main, {
 	self.data = data
 })
+```
+
+## Installation
+
+### [CocoaPods](http://cocoapods.org/)
+
+1. Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
+
+    ```rb
+    pod 'Promise'
+    ```
+
+2. Integrate your dependencies using frameworks: add `use_frameworks!` to your Podfile. 
+3. Run `pod install`.
+
+### [Carthage](https://github.com/Carthage/Carthage)
+
+1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile):
+
+    ```
+    github "khanlou/Promise"
+    ```
+
+2. Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+
+### [Swift Package Manager](https://swift.org/package-manager/)
+
+The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Promise does support its use on supported platforms.
+
+Once you have your Swift package set up, adding AlamPromiseofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+
+```swift
+dependencies: [
+    .Package(url: "https://github.com/khanlou/Promise.git", majorVersion: 2)
+]
 ```
 
 ## Playing Around
