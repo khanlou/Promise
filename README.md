@@ -320,6 +320,41 @@ Promise<Void>(work: { fulfill, reject in
 })
 ```
 
+## Installation
+
+### [CocoaPods](http://cocoapods.org/)
+
+1. Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
+
+    ```rb
+    pod 'Promise'
+    ```
+
+2. Integrate your dependencies using frameworks: add `use_frameworks!` to your Podfile. 
+3. Run `pod install`.
+
+### [Carthage](https://github.com/Carthage/Carthage)
+
+1. Add the following to your [Cartfile](https://github.com/Carthage/Carthage/blob/master/Documentation/Artifacts.md#cartfile):
+
+    ```
+    github "khanlou/Promise"
+    ```
+
+2. Run `carthage update` and follow the steps as described in Carthage's [README](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
+
+### [Swift Package Manager](https://swift.org/package-manager/)
+
+The Swift Package Manager is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler. It is in early development, but Promise does support its use on supported platforms.
+
+Once you have your Swift package set up, adding AlamPromiseofire as a dependency is as easy as adding it to the `dependencies` value of your `Package.swift`.
+
+```swift
+dependencies: [
+    .Package(url: "https://github.com/khanlou/Promise.git", majorVersion: 2)
+]
+```
+
 ## Playing Around
 
 To get started playing with this library, you can use the included `Promise.playground`.  Simply open the `.xcodeproj`, build the scheme, and then open the playground (from within the project) and start playing.
