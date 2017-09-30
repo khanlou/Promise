@@ -30,7 +30,7 @@ class PromiseRaceTests: XCTestCase {
             }
         })
         
-        let final = Promise<Int>.race([promise1, promise2, promise3])
+        let final = Promises.race([promise1, promise2, promise3])
         
         final.then({ _ in
             expectation?.fulfill()
@@ -50,9 +50,9 @@ class PromiseRaceTests: XCTestCase {
                 reject(SimpleError())
             }
         })
-        let promise2 = Promise<()>.delay(0.1).then({ 2 })
+        let promise2 = Promises.delay(0.1).then({ 2 })
         
-        let final = Promise<Int>.race([promise1, promise2])
+        let final = Promises.race([promise1, promise2])
         
         final.catch({ _ in
             expectation?.fulfill()
@@ -66,9 +66,9 @@ class PromiseRaceTests: XCTestCase {
         weak var expectation = self.expectation(description: "`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(value: 1)
-        let promise2 = Promise<()>.delay(0.1).then({ 5 })
+        let promise2 = Promises.delay(0.1).then({ 5 })
         
-        let final = Promise<Int>.race([promise1, promise2])
+        let final = Promises.race([promise1, promise2])
         
         final.then({ _ in
             expectation?.fulfill()
@@ -83,9 +83,9 @@ class PromiseRaceTests: XCTestCase {
         weak var expectation = self.expectation(description: "`Promise.race` should reject as soon as the first promise is reject.")
         
         let promise1 = Promise<Int>(error: SimpleError())
-        let promise2 = Promise<()>.delay(0.1).then({ 5 })
+        let promise2 = Promises.delay(0.1).then({ 5 })
         
-        let final = Promise<Int>.race([promise1, promise2])
+        let final = Promises.race([promise1, promise2])
         
         final.catch({ _ in
             expectation?.fulfill()

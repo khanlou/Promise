@@ -6,7 +6,13 @@
 //
 //
 
-#import <UIKit/UIKit.h>
+#include <TargetConditionals.h>
+
+#if TARGET_OS_IPHONE
+@import UIKit;
+#else
+@import AppKit;
+#endif
 
 //! Project version number for Promise.
 FOUNDATION_EXPORT double PromiseVersionNumber;

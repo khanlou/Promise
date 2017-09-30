@@ -13,8 +13,8 @@ class PromiseDelayTests: XCTestCase {
     func testDelay() {
         weak var expectation = self.expectation(description: "`Promise.delay` should succeed after the given time period has elapsed.")
         
-        let goodPromise = Promise<()>.delay(0.2)
-        let badPromise = Promise<()>.delay(1.1)
+        let goodPromise = Promises.delay(0.2)
+        let badPromise = Promises.delay(1.1)
         XCTAssert(goodPromise.isPending)
         XCTAssert(badPromise.isPending)
         
@@ -30,8 +30,8 @@ class PromiseDelayTests: XCTestCase {
     func testTimeoutPromise() {
         weak var expectation = self.expectation(description: "`Promise.timeout` should succeed after the given time period has elapsed.")
         
-        let goodPromise: Promise<()> = Promise<()>.timeout(0.2)
-        let badPromise: Promise<()> = Promise<()>.timeout(1.1)
+        let goodPromise: Promise<()> = Promises.timeout(0.2)
+        let badPromise: Promise<()> = Promises.timeout(1.1)
         XCTAssert(goodPromise.isPending)
         XCTAssert(badPromise.isPending)
         
