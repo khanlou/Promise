@@ -14,13 +14,13 @@
 		1A2A8CFC1D5D743100421E3E /* PromiseRecoverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CFB1D5D743100421E3E /* PromiseRecoverTests.swift */; };
 		1A2A8CFE1D5D764600421E3E /* PromiseRetryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */; };
 		1A42330C1F6ECC250045B066 /* PromiseKickoffTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A42330B1F6ECC250045B066 /* PromiseKickoffTests.swift */; };
+		1A6297351F803A59003973D5 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6297331F803A59003973D5 /* Promise.swift */; };
+		1A6297361F803A59003973D5 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A6297341F803A59003973D5 /* Promise+Extras.swift */; };
 		1A7CC22F1DF4D37400929E7C /* PromiseEnsureTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */; };
 		1AF54F3B1D67D60000557CCB /* PromiseZipTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */; };
 		1AFA1FA01D8A0C9500E4F76E /* PromiseThrowsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */; };
 		1AFF80FA1D5166C000C55D5A /* delay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80F91D5166C000C55D5A /* delay.swift */; };
 		1AFF80FC1D51676700C55D5A /* PromiseAllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */; };
-		2648083B1E54221900F01140 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264808391E54221900F01140 /* Promise.swift */; };
-		2648083C1E54221900F01140 /* Promise+Extras.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2648083A1E54221900F01140 /* Promise+Extras.swift */; };
 		3454F9D21D4FACD000985BBF /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 3454F9D11D4FACD000985BBF /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3454F9D91D4FACD000985BBF /* Promise.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3454F9CE1D4FACD000985BBF /* Promise.framework */; };
 		3454F9DE1D4FACD000985BBF /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3454F9DD1D4FACD000985BBF /* PromiseTests.swift */; };
@@ -45,13 +45,13 @@
 		1A2A8CFB1D5D743100421E3E /* PromiseRecoverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRecoverTests.swift; sourceTree = "<group>"; };
 		1A2A8CFD1D5D764600421E3E /* PromiseRetryTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRetryTests.swift; sourceTree = "<group>"; };
 		1A42330B1F6ECC250045B066 /* PromiseKickoffTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseKickoffTests.swift; sourceTree = "<group>"; };
+		1A6297331F803A59003973D5 /* Promise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Promise.swift; sourceTree = "<group>"; };
+		1A6297341F803A59003973D5 /* Promise+Extras.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Promise+Extras.swift"; sourceTree = "<group>"; };
 		1A7CC22E1DF4D37400929E7C /* PromiseEnsureTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseEnsureTests.swift; sourceTree = "<group>"; };
 		1AF54F3A1D67D60000557CCB /* PromiseZipTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseZipTests.swift; sourceTree = "<group>"; };
 		1AFA1F9F1D8A0C9500E4F76E /* PromiseThrowsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseThrowsTests.swift; sourceTree = "<group>"; };
 		1AFF80F91D5166C000C55D5A /* delay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = delay.swift; sourceTree = "<group>"; };
 		1AFF80FB1D51676700C55D5A /* PromiseAllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseAllTests.swift; sourceTree = "<group>"; };
-		264808391E54221900F01140 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = SOURCE_ROOT; };
-		2648083A1E54221900F01140 /* Promise+Extras.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+Extras.swift"; path = "Sources/Promise+Extras.swift"; sourceTree = SOURCE_ROOT; };
 		3454F9CE1D4FACD000985BBF /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3454F9D11D4FACD000985BBF /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Promise.h; sourceTree = "<group>"; };
 		3454F9D31D4FACD000985BBF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,7 +103,6 @@
 			children = (
 				3454F9CE1D4FACD000985BBF /* Promise.framework */,
 				3454F9D81D4FACD000985BBF /* PromiseTests.xctest */,
-				52F3C1C71ECE503D0028CA53 /* Promise.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,8 +110,8 @@
 		3454F9D01D4FACD000985BBF /* Promise */ = {
 			isa = PBXGroup;
 			children = (
-				264808391E54221900F01140 /* Promise.swift */,
-				2648083A1E54221900F01140 /* Promise+Extras.swift */,
+				1A6297331F803A59003973D5 /* Promise.swift */,
+				1A6297341F803A59003973D5 /* Promise+Extras.swift */,
 				3454F9D11D4FACD000985BBF /* Promise.h */,
 				3454F9D31D4FACD000985BBF /* Info.plist */,
 			);
@@ -156,7 +155,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52F3C1C21ECE503D0028CA53 /* Promise.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,7 +212,6 @@
 			);
 			name = "Promise Mac";
 			productName = Promise;
-			productReference = 52F3C1C71ECE503D0028CA53 /* Promise.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -284,8 +281,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2648083C1E54221900F01140 /* Promise+Extras.swift in Sources */,
-				2648083B1E54221900F01140 /* Promise.swift in Sources */,
+				1A6297361F803A59003973D5 /* Promise+Extras.swift in Sources */,
+				1A6297351F803A59003973D5 /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,8 +311,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				52F3C1BE1ECE503D0028CA53 /* Promise+Extras.swift in Sources */,
-				52F3C1BF1ECE503D0028CA53 /* Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
