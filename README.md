@@ -327,7 +327,7 @@ Promise<Void>(work: { fulfill, reject in
 1. Add the following to your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
 
     ```rb
-    pod 'Promise'
+    pod 'Promises'
     ```
 
 2. Integrate your dependencies using frameworks: add `use_frameworks!` to your Podfile. 
