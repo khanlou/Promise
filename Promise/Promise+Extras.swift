@@ -16,14 +16,25 @@ public enum Promises {
     public static func all<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
         return Promise<[T]>(work: { fulfill, reject in
             guard !promises.isEmpty else { fulfill([]); return }
+            let group = DispatchGroup()
+            var all = [T]()
+            var error: Error? = nil
             for promise in promises {
+                group.enter()
                 promise.then({ value in
-                    if !promises.contains(where: { $0.isRejected || $0.isPending }) {
-                        fulfill(promises.flatMap({ $0.value }))
-                    }
-                }).catch({ error in
-                    reject(error)
+                    all.append(value)
+                    group.leave()
+                }).catch({ err in
+                    error = err
+                    group.leave()
                 })
+            }
+            group.notify(queue: DispatchQueue.main) {
+                if let error = error {
+                    reject(error)
+                } else {
+                    fulfill(all)
+                }
             }
         })
     }
