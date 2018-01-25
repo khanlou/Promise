@@ -1,7 +1,5 @@
 # Promise
 
-![](https://api.travis-ci.org/khanlou/Promise.svg)
-
 A Promise library for Swift, based partially on [Javascript's A+ spec](https://promisesaplus.com/).
 
 ## What is a Promise?
