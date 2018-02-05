@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "Promises"
-  s.version          = "2.0"
+  s.version          = "2.0.1"
   s.summary          = "A Promise library for Swift"
   s.description      = "A Promise library for Swift, based partially on Javascript's A+ spec"
   s.module_name      = "Promise"
