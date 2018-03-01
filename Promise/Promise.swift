@@ -164,7 +164,7 @@ public final class Promise<Value> {
                 on: queue,
                 onFulfilled: { value in
                     do {
-                        try onFulfilled(value).then(fulfill, reject)
+                        try onFulfilled(value).then(on: queue, fulfill, reject)
                     } catch let error {
                         reject(error)
                     }
