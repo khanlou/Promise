@@ -2,7 +2,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Promises",
+    name: "Promise",
     products: [
       .library(
         name: "Promise",
@@ -15,6 +15,11 @@ let package = Package(
         name: "Promise",
         dependencies: [],
         path: "Promise"
+      ),
+      .testTarget(
+        name: "PromiseTests", 
+        dependencies: ["Promise"]
       )
+
     ]
 )
