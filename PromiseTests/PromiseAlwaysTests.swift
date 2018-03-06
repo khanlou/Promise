@@ -20,9 +20,9 @@ class PromiseAlwaysTests: XCTestCase {
             }
         })
         
-        promise.always({ _ in
+        promise.always {
             expectation?.fulfill()
-        })
+        }
         
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
@@ -37,9 +37,9 @@ class PromiseAlwaysTests: XCTestCase {
             }
         })
         
-        promise.always({ _ in
+        promise.always {
             expectation?.fulfill()
-        })
+        }
         
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
@@ -50,9 +50,9 @@ class PromiseAlwaysTests: XCTestCase {
         
         let promise = Promise(value: 5)
         
-        promise.always({ _ in
+        promise.always {
             expectation?.fulfill()
-        })
+        }
         
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
@@ -63,9 +63,9 @@ class PromiseAlwaysTests: XCTestCase {
         
         let promise = Promise<Int>(error: SimpleError())
         
-        promise.always({ _ in
+        promise.always {
             expectation?.fulfill()
-        })
+        }
         
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
