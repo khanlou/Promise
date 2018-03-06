@@ -18,7 +18,8 @@ let package = Package(
       ),
       .testTarget(
         name: "PromiseTests", 
-        dependencies: ["Promise"]
+        dependencies: ["Promise"],
+        path: "PromiseTests"
       )
 
     ]
