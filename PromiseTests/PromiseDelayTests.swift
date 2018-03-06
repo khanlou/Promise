@@ -82,4 +82,11 @@ class PromiseDelayTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
+
+    static let allTests = [
+        ("testDelay", testDelay),
+        ("testTimeoutPromise", testTimeoutPromise),
+        ("testTimeoutFunctionSucceeds", testTimeoutFunctionSucceeds),
+        ("testTimeoutFunctionFails", testTimeoutFunctionFails),
+    ]
 }

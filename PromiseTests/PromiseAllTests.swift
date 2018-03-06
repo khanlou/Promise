@@ -149,5 +149,11 @@ class PromiseAllTests: XCTestCase {
         XCTAssert(final.isRejected)
     }
     
-
+    static let allTests = [
+        ("testAll", testAll),
+        ("testAllWithPreFulfilledValues", testAllWithPreFulfilledValues),
+        ("testAllWithEmptyArray", testAllWithEmptyArray),
+        ("testAllWithRejectionHappeningFirst", testAllWithRejectionHappeningFirst),
+        ("testAllWithRejectionHappeningLast", testAllWithRejectionHappeningLast),
+    ]
 }

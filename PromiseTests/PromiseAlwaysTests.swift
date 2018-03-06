@@ -71,4 +71,11 @@ class PromiseAlwaysTests: XCTestCase {
         XCTAssert(promise.isRejected)
     }
 
+
+    static let allTests = [
+        ("testAlways", testAlways),
+        ("testAlwaysRejects", testAlwaysRejects),
+        ("testAlwaysInstantFulfill", testAlwaysInstantFulfill),
+        ("testAlwaysInstantReject", testAlwaysInstantReject),
+    ]
 }

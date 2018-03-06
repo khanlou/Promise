@@ -51,4 +51,9 @@ class PromiseEnsureTests: XCTestCase {
         XCTAssertNotNil(promise.error)
     }
 
+    static let allTests = [
+        ("testEnsureRejects", testEnsureRejects),
+        ("testEnsureSucceeds", testEnsureSucceeds),
+        ("testEnsureOnlyCalledOnSucceess", testEnsureOnlyCalledOnSucceess),
+    ]
 }

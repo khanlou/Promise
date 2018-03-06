@@ -263,4 +263,24 @@ class PromiseTests: XCTestCase {
         promise.reject(SimpleError())
         XCTAssertEqual(promise.value, "correct")
     }
+
+    static let allTests = [
+        ("testThen", testThen),
+        ("testAsync", testAsync),
+        ("testAsyncThrowing", testAsyncThrowing),
+        ("testAsyncRejection", testAsyncRejection),
+        ("testThenWhenPending", testThenWhenPending),
+        ("testRejectedAfterFulfilled", testRejectedAfterFulfilled),
+        ("testPending", testPending),
+        ("testFulfilled", testFulfilled),
+        ("testRejected", testRejected),
+        ("testMap", testMap),
+        ("testFlatMap", testFlatMap),
+        ("testTrailingClosuresCompile", testTrailingClosuresCompile),
+        ("testZalgoContained", testZalgoContained),
+        ("testDoubleResolve", testDoubleResolve),
+        ("testRejectThenResolve", testRejectThenResolve),
+        ("testDoubleReject", testDoubleReject),
+        ("testResolveThenReject", testResolveThenReject),
+    ]
 }

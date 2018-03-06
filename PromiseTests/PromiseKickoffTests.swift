@@ -42,4 +42,8 @@ class PromiseKickoffTests: XCTestCase {
         XCTAssert(promise.isRejected)
     }
 
+    static let allTests = [
+        ("testKickoff", testKickoff),
+        ("testFailingKickoff", testFailingKickoff),
+    ]
 }
