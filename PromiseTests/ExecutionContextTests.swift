@@ -98,4 +98,11 @@ class ExecutionContextTests: XCTestCase {
         
     }
 
+
+    static let allTests = [
+        ("testNonInvalidatedInvalidatableQueue", testNonInvalidatedInvalidatableQueue),
+        ("testInvalidatedInvalidatableQueue", testInvalidatedInvalidatableQueue),
+        ("testTapContinuesToFireInvalidatableQueue", testTapContinuesToFireInvalidatableQueue),
+        ("testInvalidatableQueueSupportsNonMainQueues", testInvalidatableQueueSupportsNonMainQueues),
+    ]
 }
