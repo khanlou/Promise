@@ -4,17 +4,22 @@ import PackageDescription
 let package = Package(
     name: "Promises",
     products: [
-      .library(
-        name: "Promise",
-        targets: ["Promise"]
-      ),
+        .library(
+            name: "Promise",
+            targets: ["Promise"]
+        ),
     ],
     dependencies: [],
     targets: [
-      .target(
-        name: "Promise",
-        dependencies: [],
-        path: "Promise"
-      )
+        .target(
+            name: "Promise",
+            dependencies: [],
+            path: "Promise"
+        ),
+        .testTarget(
+            name: "PromiseTests",
+            dependencies: ["Promise"],
+            path: "PromiseTests"
+        )
     ]
 )

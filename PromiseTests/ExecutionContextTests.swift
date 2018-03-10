@@ -10,6 +10,10 @@ import XCTest
 
 import Promise
 
+#if os(Linux)
+    import Dispatch
+#endif
+
 class ExecutionContextTests: XCTestCase {
 
 
@@ -94,4 +98,11 @@ class ExecutionContextTests: XCTestCase {
         
     }
 
+
+    static let allTests = [
+        ("testNonInvalidatedInvalidatableQueue", testNonInvalidatedInvalidatableQueue),
+        ("testInvalidatedInvalidatableQueue", testInvalidatedInvalidatableQueue),
+        ("testTapContinuesToFireInvalidatableQueue", testTapContinuesToFireInvalidatableQueue),
+        ("testInvalidatableQueueSupportsNonMainQueues", testInvalidatableQueueSupportsNonMainQueues),
+    ]
 }

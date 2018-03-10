@@ -134,4 +134,13 @@ class PromiseRecoverTests: XCTestCase {
         XCTAssertEqual(int, 2)
         XCTAssert(promise.isFulfilled)
     }
+
+    static let allTests = [
+        ("testRecover", testRecover),
+        ("testRecoverWithThrowingFunction", testRecoverWithThrowingFunction),
+        ("testRecoverWithThrowingFunctionError", testRecoverWithThrowingFunctionError),
+        ("testRecoverInstant", testRecoverInstant),
+        ("testIgnoreRecover", testIgnoreRecover),
+        ("testIgnoreRecoverInstant", testIgnoreRecoverInstant),
+    ]
 }

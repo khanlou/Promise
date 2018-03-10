@@ -95,4 +95,10 @@ class PromiseRaceTests: XCTestCase {
         XCTAssert(final.isRejected)
     }
 
+    static let allTests = [
+        ("testRace", testRace),
+        ("testRaceFailure", testRaceFailure),
+        ("testInstantResolve", testInstantResolve),
+        ("testInstantReject", testInstantReject),
+    ]
 }
