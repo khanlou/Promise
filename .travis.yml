@@ -22,4 +22,4 @@ env:
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export PATH=$(pwd)/tests/$SWIFT_VERSION-ubuntu14.04/usr/bin:"${PATH}" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then swift test ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then xcodebuild clean test -scheme PromiseTests ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then xcodebuild clean test -scheme Promise ; fi
