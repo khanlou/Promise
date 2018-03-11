@@ -7,9 +7,7 @@
 //
 
 import XCTest
-#if os(Linux)
-    import Dispatch
-#endif
+import Dispatch
 
 internal func delay(_ duration: TimeInterval, block: @escaping () -> ()) {
     DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: {

@@ -9,10 +9,7 @@
 import XCTest
 
 import Promise
-
-#if os(Linux)
-    import Dispatch
-#endif
+import Dispatch
 
 class ExecutionContextTests: XCTestCase {
 
