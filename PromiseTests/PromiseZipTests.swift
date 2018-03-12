@@ -50,4 +50,9 @@ class PromiseZipTests: XCTestCase {
         XCTAssertEqual(tuple.2, [1, 1, 2, 3, 5])
         XCTAssertEqual(tuple.3, ["two", "strings"])
     }
+
+    static let allTests = [
+        ("testZipping2", testZipping2),
+        ("testMultipleParameters", testMultipleParameters),
+    ]
 }

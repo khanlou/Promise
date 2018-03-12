@@ -60,4 +60,10 @@ class PromiseRetryTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
+
+    static let allTests = [
+        ("testRetry", testRetry),
+        ("testRetryWithInstantSuccess", testRetryWithInstantSuccess),
+        ("testRetryWithNeverSuccess", testRetryWithNeverSuccess),
+    ]
 }

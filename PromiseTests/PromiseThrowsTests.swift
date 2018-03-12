@@ -75,4 +75,10 @@ class PromiseThrowsTests: XCTestCase {
         XCTAssert(promise.error is SimpleError)
     }
 
+    static let allTests = [
+        ("testThrowsInMapping", testThrowsInMapping),
+        ("testThrowsInMappingWithError", testThrowsInMappingWithError),
+        ("testThrowsInFlatmapping", testThrowsInFlatmapping),
+        ("testThrowsInFlatmappingWithError", testThrowsInFlatmappingWithError),
+    ]
 }
