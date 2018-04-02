@@ -162,7 +162,7 @@ class PromiseTests: XCTestCase {
         weak var expectation = self.expectation(description: "")
         
         let promise = Promise(value: "someString").then({ string in
-            return string.characters.count
+            return string.count
         }).then({ count in
             return count*2
         }).then({ doubled in
@@ -184,7 +184,7 @@ class PromiseTests: XCTestCase {
         }).then({ value in
             return Promise<Int>(work: { fulfill, reject in
                 delay(0.05) {
-                    fulfill(value.characters.count)
+                    fulfill(value.count)
                 }
             })
         }).then({ value in
@@ -208,7 +208,7 @@ class PromiseTests: XCTestCase {
             }.then { value in
                 return Promise<Int> { fulfill, reject in
                     delay(0.05) {
-                        fulfill(value.characters.count)
+                        fulfill(value.count)
                     }
                 }
             }.then { value in
