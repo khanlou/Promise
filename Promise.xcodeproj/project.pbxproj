@@ -233,6 +233,9 @@
 						CreatedOnToolsVersion = 7.3.1;
 						LastSwiftMigration = 0930;
 					};
+					52F3C1BC1ECE503D0028CA53 = {
+						LastSwiftMigration = 0930;
+					};
 				};
 			};
 			buildConfigurationList = 3454F9C81D4FACD000985BBF /* Build configuration list for PBXProject "Promise" */;
@@ -521,7 +524,8 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Debug;
 		};
@@ -541,7 +545,8 @@
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
-				SWIFT_VERSION = 3.0;
+				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
+				SWIFT_VERSION = 4.0;
 			};
 			name = Release;
 		};
