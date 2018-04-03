@@ -5,7 +5,7 @@ matrix:
         dist: trusty
         sudo: required
       - os: osx
-        osx_image: xcode9.2
+        osx_image: xcode9.3beta
 addons:
   apt:
     packages:
@@ -14,11 +14,11 @@ addons:
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then SWIFT_DIR=tests ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then mkdir $SWIFT_DIR ; fi
-  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://swift.org/builds/swift-4.0.3-release/ubuntu1404/swift-4.0.3-RELEASE/swift-4.0.3-RELEASE-ubuntu14.04.tar.gz -s | tar xz -C $SWIFT_DIR &> /dev/null ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then curl https://swift.org/builds/swift-4.1-release/ubuntu1404/swift-4.1-RELEASE/swift-4.1-RELEASE-ubuntu14.04.tar.gz -s | tar xz -C $SWIFT_DIR &> /dev/null ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get update ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then sudo apt-get install clang libicu-dev ; fi
 env:
-  - SWIFT_VERSION=swift-4.0.3-RELEASE
+  - SWIFT_VERSION=swift-4.1-RELEASE
 script:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then export PATH=$(pwd)/tests/$SWIFT_VERSION-ubuntu14.04/usr/bin:"${PATH}" ; fi
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then swift test ; fi

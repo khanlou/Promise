@@ -22,7 +22,7 @@ public enum Promises {
             for promise in promises {
                 promise.then({ value in
                     if !promises.contains(where: { $0.isRejected || $0.isPending }) {
-                        fulfill(promises.flatMap({ $0.value }))
+                        fulfill(promises.compactMap({ $0.value }))
                     }
                 }).catch({ error in
                     reject(error)
