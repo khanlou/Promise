@@ -22,11 +22,7 @@ public enum Promises {
             for promise in promises {
                 promise.then({ value in
                     if !promises.contains(where: { $0.isRejected || $0.isPending }) {
-                        #if swift(>=4.1)
-                            fulfill(promises.compactMap({ $0.value }))
-                        #else
-                            fulfill(promises.flatMap({ $0.value }))
-                        #endif
+                        fulfill(promises.compactMap({ $0.value }))
                     }
                 }).catch({ error in
                     reject(error)
@@ -174,3 +170,11 @@ extension Promise {
         })
     }
 }
+
+#if !swift(>=4.1)
+    internal extension Sequence {
+        func compactMap<T>(_ fn: (Element) throws -> T?) rethrows -> [T] {
+            return try flatMap { try fn($0).map { [$0] } ?? [] }
+        }
+    }
+#endif
