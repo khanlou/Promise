@@ -170,3 +170,11 @@ extension Promise {
         })
     }
 }
+
+#if !swift(>=4.1)
+    internal extension Sequence {
+        func compactMap<T>(_ fn: (Element) throws -> T?) rethrows -> [T] {
+            return try flatMap { try fn($0).map { [$0] } ?? [] }
+        }
+    }
+#endif
