@@ -42,8 +42,27 @@ class PromiseKickoffTests: XCTestCase {
         XCTAssert(promise.isRejected)
     }
 
+    func testPromiseKickoff() {
+        weak var expectation = self.expectation(description: "Kicking off should result in a valid value.")
+
+        let promise = Promises
+            .kickoff({
+                Promises
+                    .delay(0.1)
+                    .then({ return 2 })
+            })
+            .always({
+                expectation?.fulfill()
+            })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssert(promise.isFulfilled)
+        XCTAssertEqual(promise.value, 2)
+    }
+
     static let allTests = [
         ("testKickoff", testKickoff),
         ("testFailingKickoff", testFailingKickoff),
+        ("testPromiseKickoff", testPromiseKickoff),
     ]
 }
