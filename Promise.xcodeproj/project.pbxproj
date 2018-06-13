@@ -65,7 +65,7 @@
 		72B61D3B1E00E5830008E829 /* Wrench.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Wrench.swift; sourceTree = "<group>"; };
 		76E25E381D8483D0000A58DF /* Promise.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = Promise.playground; sourceTree = "<group>"; };
 		EA55D56620D0C44D0010074F /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		EA55D57520D176610010074F /* Promise_watchOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise_watchOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EA55D57520D176610010074F /* Promise.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Promise.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,7 +124,7 @@
 				3454F9CE1D4FACD000985BBF /* Promise.framework */,
 				3454F9D81D4FACD000985BBF /* PromiseTests.xctest */,
 				EA55D56620D0C44D0010074F /* Promise.framework */,
-				EA55D57520D176610010074F /* Promise_watchOS.framework */,
+				EA55D57520D176610010074F /* Promise.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -283,7 +283,7 @@
 			);
 			name = "Promise watchOS";
 			productName = "Promise watchOS";
-			productReference = EA55D57520D176610010074F /* Promise_watchOS.framework */;
+			productReference = EA55D57520D176610010074F /* Promise.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -740,7 +740,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.Promise;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Promise;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -770,7 +770,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.khanlou.Promise;
-				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
+				PRODUCT_NAME = Promise;
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
