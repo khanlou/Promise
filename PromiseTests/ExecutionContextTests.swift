@@ -13,6 +13,42 @@ import Dispatch
 
 class ExecutionContextTests: XCTestCase {
 
+    func testConcurrency() {
+        (0..<5).forEach { _ in self.testThreads() }
+    }
+    
+    func testThreads() {
+        var then: DispatchTime!
+        var always: DispatchTime!
+        weak var expectation = self.expectation(description: "Threading is hard!")
+        Promise(value: 1)
+        .then(on: DispatchQueue.global(qos: .default), { value in
+            return 2
+        })
+        .then(on: DispatchQueue.global(qos: .background)) { value -> Promise<Int> in
+            return Promise<Int>(queue: .main) { s, f in
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3)) {
+                    s(3)
+                }
+            }
+        }
+        .then(on: DispatchQueue.global(qos: .background)) { value in
+            return 4
+        }
+        .then(on: DispatchQueue.global(qos: .utility), { value in
+            then = DispatchTime.now()
+        })
+        .catch(on: DispatchQueue.global(qos: .default)) { err in
+            // do nothing, won't fail
+        }
+        .then(on: DispatchQueue.global(qos: .default)) { value in
+            always = DispatchTime.now()
+            XCTAssert(then != nil)
+            XCTAssert(always > then)
+            expectation?.fulfill()
+        }
+        waitForExpectations(timeout: 5, handler: nil)
+    }
 
     func testNonInvalidatedInvalidatableQueue() {
 
@@ -97,6 +133,8 @@ class ExecutionContextTests: XCTestCase {
 
 
     static let allTests = [
+        ("testThreads", testThreads),
+        ("testConcurrency", testConcurrency),
         ("testNonInvalidatedInvalidatableQueue", testNonInvalidatedInvalidatableQueue),
         ("testInvalidatedInvalidatableQueue", testInvalidatedInvalidatableQueue),
         ("testTapContinuesToFireInvalidatableQueue", testTapContinuesToFireInvalidatableQueue),

@@ -12,15 +12,10 @@ import Foundation
 #endif
 
 public protocol ExecutionContext {
-    var queue: DispatchQueue { get }
     func execute(_ work: @escaping () -> Void)
 }
 
 extension DispatchQueue: ExecutionContext {
-
-    public var queue: DispatchQueue {
-        return self
-    }
 
     public func execute(_ work: @escaping () -> Void) {
         self.async(execute: work)
@@ -31,7 +26,7 @@ public final class InvalidatableQueue: ExecutionContext {
 
     private var valid = true
 
-    public var queue: DispatchQueue
+    private var queue: DispatchQueue
 
     public init(queue: DispatchQueue = .main) {
         self.queue = queue
@@ -52,16 +47,19 @@ struct Callback<Value> {
     let onFulfilled: (Value) -> ()
     let onRejected: (Error) -> ()
     let executionContext: ExecutionContext
+    var completion: () -> ()
     
     func callFulfill(_ value: Value) {
         executionContext.execute({
             self.onFulfilled(value)
+            self.completion()
         })
     }
     
     func callReject(_ error: Error) {
         executionContext.execute({
             self.onRejected(error)
+            self.completion()
         })
     }
 }
@@ -244,7 +242,9 @@ public final class Promise<Value> {
     }
     
     private func addCallbacks(on queue: ExecutionContext = DispatchQueue.main, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
-        let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, executionContext: queue)
+        let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, executionContext: queue) {
+            self.fireCallbacksIfCompleted()
+        }
         lockQueue.async(execute: {
             self.callbacks.append(callback)
         })
@@ -257,19 +257,14 @@ public final class Promise<Value> {
                 return
             }
             self.callbacks.removeFirst()
-            
-            let group = DispatchGroup()
-            group.notify(queue: callback.executionContext.queue) {
-                self.fireCallbacksIfCompleted()
-            }
 
             switch self.state {
             case let .fulfilled(value):
-                callback.executionContext.queue.async(group: group) {
+                callback.executionContext.execute {
                     callback.callFulfill(value)
                 }
             case let .rejected(error):
-                callback.executionContext.queue.async(group: group) {
+                callback.executionContext.execute {
                     callback.callReject(error)
                 }
             default:
