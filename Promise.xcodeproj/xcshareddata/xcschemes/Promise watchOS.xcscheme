@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "EA55D57420D176610010074F"
-               BuildableName = "Promise_watchOS.framework"
+               BuildableName = "Promise.framework"
                BlueprintName = "Promise watchOS"
                ReferencedContainer = "container:Promise.xcodeproj">
             </BuildableReference>
@@ -46,7 +46,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA55D57420D176610010074F"
-            BuildableName = "Promise_watchOS.framework"
+            BuildableName = "Promise.framework"
             BlueprintName = "Promise watchOS"
             ReferencedContainer = "container:Promise.xcodeproj">
          </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "EA55D57420D176610010074F"
-            BuildableName = "Promise_watchOS.framework"
+            BuildableName = "Promise.framework"
             BlueprintName = "Promise watchOS"
             ReferencedContainer = "container:Promise.xcodeproj">
          </BuildableReference>

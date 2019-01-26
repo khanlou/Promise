@@ -16,6 +16,7 @@ public protocol ExecutionContext {
 }
 
 extension DispatchQueue: ExecutionContext {
+
     public func execute(_ work: @escaping () -> Void) {
         self.async(execute: work)
     }
@@ -25,7 +26,7 @@ public final class InvalidatableQueue: ExecutionContext {
 
     private var valid = true
 
-    private let queue: DispatchQueue
+    private var queue: DispatchQueue
 
     public init(queue: DispatchQueue = .main) {
         self.queue = queue
@@ -45,17 +46,20 @@ public final class InvalidatableQueue: ExecutionContext {
 struct Callback<Value> {
     let onFulfilled: (Value) -> ()
     let onRejected: (Error) -> ()
-    let queue: ExecutionContext
+    let executionContext: ExecutionContext
+    var completion: () -> ()
     
     func callFulfill(_ value: Value) {
-        queue.execute({
+        executionContext.execute({
             self.onFulfilled(value)
+            self.completion()
         })
     }
     
     func callReject(_ error: Error) {
-        queue.execute({
+        executionContext.execute({
             self.onRejected(error)
+            self.completion()
         })
     }
 }
@@ -238,7 +242,9 @@ public final class Promise<Value> {
     }
     
     private func addCallbacks(on queue: ExecutionContext = DispatchQueue.main, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
-        let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, queue: queue)
+        let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, executionContext: queue) {
+            self.fireCallbacksIfCompleted()
+        }
         lockQueue.async(execute: {
             self.callbacks.append(callback)
         })
@@ -247,18 +253,24 @@ public final class Promise<Value> {
     
     private func fireCallbacksIfCompleted() {
         lockQueue.async(execute: {
-            guard !self.state.isPending else { return }
-            self.callbacks.forEach { callback in
-                switch self.state {
-                case let .fulfilled(value):
-                    callback.callFulfill(value)
-                case let .rejected(error):
-                    callback.callReject(error)
-                default:
-                    break
-                }
+            guard let callback = self.callbacks.first, !self.state.isPending else {
+                return
             }
-            self.callbacks.removeAll()
+            self.callbacks.removeFirst()
+
+            switch self.state {
+            case let .fulfilled(value):
+                callback.executionContext.execute {
+                    callback.callFulfill(value)
+                }
+            case let .rejected(error):
+                callback.executionContext.execute {
+                    callback.callReject(error)
+                }
+            default:
+                break
+            }
+            
         })
     }
 }
