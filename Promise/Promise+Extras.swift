@@ -88,7 +88,7 @@ public enum Promises {
 
     public static func zip<T, U>(_ first: Promise<T>, _ second: Promise<U>) -> Promise<(T, U)> {
         return Promise<(T, U)>(work: { fulfill, reject in
-            let resolver: (Any) -> () = { _ in
+            let resolver: (Any) -> Void = { _ in
                 if let firstValue = first.value, let secondValue = second.value {
                     fulfill((firstValue, secondValue))
                 }
@@ -141,7 +141,7 @@ extension Promise {
     }
 
     @discardableResult
-    public func always(on queue: ExecutionContext = DispatchQueue.main, _ onComplete: @escaping () -> ()) -> Promise<Value> {
+    public func always(on queue: ExecutionContext = DispatchQueue.main, _ onComplete: @escaping () -> Void) -> Promise<Value> {
         return then(on: queue, { _ in
             onComplete()
         }, { _ in

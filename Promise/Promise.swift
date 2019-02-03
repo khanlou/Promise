@@ -44,10 +44,10 @@ public final class InvalidatableQueue: ExecutionContext {
 }
 
 struct Callback<Value> {
-    let onFulfilled: (Value) -> ()
-    let onRejected: (Error) -> ()
+    let onFulfilled: (Value) -> Void
+    let onRejected: (Error) -> Void
     let executionContext: ExecutionContext
-    var completion: () -> ()
+    var completion: () -> Void
     
     func callFulfill(_ value: Value) {
         executionContext.execute({
@@ -149,7 +149,7 @@ public final class Promise<Value> {
         state = .rejected(error: error)
     }
     
-    public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> (), _ reject: @escaping (Error) -> () ) throws -> ()) {
+    public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> Void, _ reject: @escaping (Error) -> Void) throws -> Void) {
         self.init()
         queue.async(execute: {
             do {
@@ -191,13 +191,13 @@ public final class Promise<Value> {
     }
     
     @discardableResult
-    public func then(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> (), _ onRejected: @escaping (Error) -> () = { _ in }) -> Promise<Value> {
+    public func then(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> Void, _ onRejected: @escaping (Error) -> Void = { _ in }) -> Promise<Value> {
         addCallbacks(on: queue, onFulfilled: onFulfilled, onRejected: onRejected)
         return self
     }
     
     @discardableResult
-    public func `catch`(on queue: ExecutionContext = DispatchQueue.main, _ onRejected: @escaping (Error) -> ()) -> Promise<Value> {
+    public func `catch`(on queue: ExecutionContext = DispatchQueue.main, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
@@ -241,7 +241,7 @@ public final class Promise<Value> {
         fireCallbacksIfCompleted()
     }
     
-    private func addCallbacks(on queue: ExecutionContext = DispatchQueue.main, onFulfilled: @escaping (Value) -> (), onRejected: @escaping (Error) -> ()) {
+    private func addCallbacks(on queue: ExecutionContext = DispatchQueue.main, onFulfilled: @escaping (Value) -> Void, onRejected: @escaping (Error) -> Void) {
         let callback = Callback(onFulfilled: onFulfilled, onRejected: onRejected, executionContext: queue) {
             self.fireCallbacksIfCompleted()
         }
