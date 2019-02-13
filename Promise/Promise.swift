@@ -154,7 +154,7 @@ public final class Promise<Value> {
         queue.async(execute: {
             do {
                 try work(self.fulfill, self.reject)
-            } catch let error {
+            } catch {
                 self.reject(error)
             }
         })
@@ -193,14 +193,17 @@ public final class Promise<Value> {
     @discardableResult
     public func then(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) throws -> Void) -> Promise<Value> {
         return Promise(work: { (fulfill, reject) in
-            self.addCallbacks(on: queue, onFulfilled: { (value) in
-                do {
-                    try onFulfilled(value)
-                    fulfill(value)
-                } catch {
-                    reject(error)
-                }
-            }, onRejected: reject)
+            self.addCallbacks(
+                on: queue,
+                onFulfilled: { (value) in
+                    do {
+                        try onFulfilled(value)
+                        fulfill(value)
+                    } catch {
+                        reject(error)
+                    }
+                }, onRejected: reject
+            )
         })
     }
     
