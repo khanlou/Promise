@@ -90,7 +90,8 @@ class ExecutionContextTests: XCTestCase {
 
     func testTapContinuesToFireInvalidatableQueue() {
 
-        weak var expectation = self.expectation(description: "A tapping `then` block on an invalidated queue shouldn't prevent future then blocks from firing.")
+        weak var expectation = self.expectation(description: "A tapping `then` block on an invalidated queue shouldn't trigger future then blocks from firing.")
+        expectation?.isInverted = true
 
         let invalidatableQueue = InvalidatableQueue()
         invalidatableQueue.invalidate()
