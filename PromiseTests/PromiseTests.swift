@@ -92,28 +92,30 @@ class PromiseTests: XCTestCase {
     }
     
     func testRejectedAfterFulfilled() {
-        weak var expectation = self.expectation(description: "A Promise that is rejected after being fulfilled should not call any further `then` callbacks.")
+        weak var expectation = self.expectation(description: "A child Promise that is rejected after being generated from a parent fulfilled Promise should not call any further `then` callbacks.")
         
         var thenCalled = false
         var thenCalledAgain = false
 
-        let promise = Promise(value: 5).then({ _ in
+        let fulfilledPromise = Promise(value: 5)
+        let rejectedPromise = fulfilledPromise.then({ _ in
             thenCalled = true
         })
         
-        promise.then({ _ in
+        rejectedPromise.then({ _ in
             thenCalledAgain = true
         })
         
-        promise.reject(SimpleError())
+        rejectedPromise.reject(SimpleError())
         
         delay(0.05) {
             expectation?.fulfill()
         }
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssertTrue(thenCalled)
-        XCTAssertTrue(thenCalledAgain)
-        XCTAssert(promise.isFulfilled)
+        XCTAssertFalse(thenCalledAgain)
+        XCTAssertTrue(fulfilledPromise.isFulfilled)
+        XCTAssertTrue(rejectedPromise.isRejected)
     }
     
     func testPending() {

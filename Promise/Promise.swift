@@ -184,7 +184,7 @@ public final class Promise<Value> {
         return then(on: queue, { (value) -> Promise<NewValue> in
             do {
                 return Promise<NewValue>(value: try onFulfilled(value))
-            } catch let error {
+            } catch {
                 return Promise<NewValue>(error: error)
             }
         })
