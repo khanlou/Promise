@@ -44,11 +44,14 @@ class PromiseKickoffTests: XCTestCase {
 
     func testPromiseKickoff() {
         weak var expectation = self.expectation(description: "Kicking off should result in a valid value.")
-
+        
+        var flag = false
+        
         let promise = Promises
             .kickoff({
-                Promises
-                    .delay(0.1)
+                return Promises
+                    .delay(0.5)
+                    .then({ flag = true })
                     .then({ return 2 })
             })
             .always({
@@ -58,6 +61,7 @@ class PromiseKickoffTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isFulfilled)
         XCTAssertEqual(promise.value, 2)
+        XCTAssertTrue(flag)
     }
 
     static let allTests = [
