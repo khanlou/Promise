@@ -11,8 +11,8 @@ import Promise
 
 class PromiseErrorMatcherTests: XCTestCase {
     
-    func testCasting() {
-        weak var expectation = self.expectation(description: "`Promise.catch` should always cast the error type.")
+    func testCastingExecutesMatchingErrors() {
+        weak var expectation = self.expectation(description: "`Promise.catch` should cast the error when it is the right type.")
         
         var flag = false
 
@@ -32,8 +32,8 @@ class PromiseErrorMatcherTests: XCTestCase {
         XCTAssertTrue(flag)
     }
     
-    func testCastingFailing() {
-        weak var expectation = self.expectation(description: "`Promise.catch` should always cast the error type.")
+    func testCastingIgnoresNonMatchingErrors() {
+        weak var expectation = self.expectation(description: "`Promise.catch` should not cast the error when it is the wrong type.")
         
         var flag = false
         
@@ -57,4 +57,9 @@ class PromiseErrorMatcherTests: XCTestCase {
         _ = 1 + 1
     }
     
+    static let allTests = [
+        ("testCastingIgnoresNonMatchingErrors", testCastingIgnoresNonMatchingErrors),
+        ("testCastingExecutesMatchingErrors", testCastingExecutesMatchingErrors),
+        ]
+
 }
