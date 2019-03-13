@@ -169,6 +169,14 @@ extension Promise {
             return value
         })
     }
+    
+    public func `catch`<E: Error>(type errorType: E.Type, _ onRejected: @escaping (E) -> Void) -> Promise<Value> {
+        return self.catch({ error in
+            if let castedError = error as? E {
+                onRejected(castedError)
+            }
+        })
+    }
 }
 
 #if !swift(>=4.1)
