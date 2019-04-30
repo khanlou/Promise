@@ -31,7 +31,7 @@ if false {
     let strings = [ "a", "b", "c" ]
     let promises = strings.map(promisedString)
 
-    Promise<[String]>.all(promises).then({ allStrings -> Void in
+    Promises.all(promises).then({ allStrings -> Void in
         print("got em all:", allStrings)
     })
 }
@@ -44,7 +44,7 @@ if false {
 if false {
     print("Running .delay() example")
 
-    Promise<Void>.delay(1.0).then({ _ -> Void in
+    Promises.delay(1.0).then({ _ -> Void in
         print("after delay")
     })
 }
@@ -59,7 +59,7 @@ if false {
     let strings = [ "a", "b", "c", "d", "e", "f" ]
     let promises = strings.map(promisedString)
 
-    Promise<String>.race(promises).then({ (value) -> Void in
+    Promises.race(promises).then({ (value) -> Void in
         // If you run this multiple times, you might get a different result each time
         print("got: \(value)")
     })
@@ -132,7 +132,7 @@ if false {
     print("Running .retry() example")
 
     var i = 0
-    Promise<String>.retry(count: 5, delay: 0.5, generate: { () -> Promise<String> in
+    Promises.retry(count: 5, delay: 0.5, generate: { () -> Promise<String> in
         print("generating \(i)")
         i += 1
         return failablePromise("retry", fail: i<3)
