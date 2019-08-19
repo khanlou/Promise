@@ -135,6 +135,51 @@ class PromiseRecoverTests: XCTestCase {
         XCTAssert(promise.isFulfilled)
     }
 
+    func testRecoveryByErrorType() {
+        weak var expectation = self.expectation(description: "`Promise.recover` should recover from errors.")
+
+        let promise = Promise<String>(work: { fulfill, reject in
+            delay(0.1) {
+                reject(SimpleError())
+            }
+        }).recover(type: SimpleError.self, { error in
+            return Promise(value: "typed")
+        }).recover({ error in
+            XCTFail("typed recovery should have prevented this untyped one from being called.")
+            return Promise(value: "untyped")
+        }).always({
+            expectation?.fulfill()
+        })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        guard let branch = promise.value else { XCTFail(); return }
+        XCTAssertEqual(branch, "typed", "`Promise.value` should have been set by the typed recovery.")
+        XCTAssert(promise.isFulfilled)
+    }
+
+    func testSkipRecoveryOfTypedErrors() {
+        weak var expectation = self.expectation(description: "`Promise.recover` should recover from errors.")
+
+        let promise = Promise<String>(work: { fulfill, reject in
+            delay(0.1) {
+                reject(SimpleError())
+            }
+        }).recover(type: AlternativeError.self, { error in
+            XCTFail("typed recovery should have been skipped due to non-matching error types.")
+            return Promise(value: "typed")
+        }).recover({ error in
+            XCTAssert(error as? SimpleError == SimpleError())
+            return Promise(value: "untyped")
+        }).always({
+            expectation?.fulfill()
+        })
+
+        waitForExpectations(timeout: 1, handler: nil)
+        guard let branch = promise.value else { XCTFail(); return }
+        XCTAssertEqual(branch, "untyped", "`Promise.value` should have been set by the untyped recovery.")
+        XCTAssert(promise.isFulfilled)
+    }
+
     static let allTests = [
         ("testRecover", testRecover),
         ("testRecoverWithThrowingFunction", testRecoverWithThrowingFunction),
@@ -142,5 +187,7 @@ class PromiseRecoverTests: XCTestCase {
         ("testRecoverInstant", testRecoverInstant),
         ("testIgnoreRecover", testIgnoreRecover),
         ("testIgnoreRecoverInstant", testIgnoreRecoverInstant),
+        ("testRecoveryByErrorType", testRecoveryByErrorType),
+        ("testSkipRecoveryOfTypedErrors", testSkipRecoveryOfTypedErrors),
     ]
 }

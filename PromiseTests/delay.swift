@@ -20,6 +20,9 @@ struct SimpleError: Error, Equatable {
     
 }
 
+struct AlternativeError: Error, Equatable {
+
+}
 
 func ==(lhs: SimpleError, rhs: SimpleError) -> Bool {
     return true
