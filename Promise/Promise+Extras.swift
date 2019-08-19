@@ -150,8 +150,17 @@ extension Promise {
     }
 
     public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
+        return recover(type: Error.self, recovery)
+    }
+
+    public func recover<E: Error>(type errorType: E.Type, _ recovery: @escaping (E) throws -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
-            self.then(fulfill).catch({ error in
+            self.then(fulfill).catch({ anyError in
+                guard let error = anyError as? E else {
+                    reject(anyError)
+                    return
+                }
+
                 do {
                     try recovery(error).then(fulfill, reject)
                 } catch (let error) {
