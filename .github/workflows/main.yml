@@ -33,7 +33,7 @@ jobs:
     - name: Process Info
       run: ps
     - name: Alias Swift
-      run: alias swift = ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift
+      run: alias swift='./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift'
     - name: Swift Version
       run: swift --version
     - name: Test
