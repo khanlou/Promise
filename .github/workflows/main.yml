@@ -30,9 +30,5 @@ jobs:
       run: sudo apt-get update
     - name: Install clang and libicu
       run: sudo apt-get install clang libicu-dev
-    - name: Alias Swift
-      run: alias swift='./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift'
-    - name: Swift Version
-      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift --version
-    - name: Test
-      run: swift test
+    - name: Run Test
+      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift test
