@@ -1,4 +1,4 @@
-name: Build & Run Tests
+name: CI
 
 on:
   pull_request:
@@ -6,8 +6,8 @@ on:
     - master
 
 jobs:
-  test:
-    name: Run Tests
+  mac:
+    name: Mac
     runs-on: macOS-10.14
     steps:
     - name: Checkout
@@ -16,3 +16,23 @@ jobs:
       run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
     - name: Test
       run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone X,OS=12.4'
+  linux:
+    name: Linux
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Set up directory
+      run: SWIFT_DIR=tests
+    - name: Make directory
+      run: mkdir $SWIFT_DIR
+    - name: Download Swift
+      run: curl hhttps://swift.org/builds/swift-4.2.1-release/ubuntu1804/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C $SWIFT_DIR &> /dev/null
+    - name: Update apt
+      run: sudo apt-get update
+    - name: Install clang and libicu
+      run: sudo apt-get install clang libicu-dev
+    - name: Export path
+      run: export PATH=$(pwd)/tests/$SWIFT_VERSION-ubuntu14.04/usr/bin:"${PATH}"
+    - name: Test
+      run: swift test
