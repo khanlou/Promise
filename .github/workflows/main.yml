@@ -14,9 +14,5 @@ jobs:
       uses: actions/checkout@master
     - name: Select Xcode
       run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
-    - name: List Simulators
-      run: xcrun simctl list
-    - name: Build
-      run: xcodebuild
     - name: Test
       run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone X,OS=12.4'
