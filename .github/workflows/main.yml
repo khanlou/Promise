@@ -15,4 +15,4 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
     - name: Test
-      run: swift test
+      run: xcodebuild clean test -scheme "Promise"
