@@ -22,12 +22,10 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
-    - name: Set up directory
-      run: SWIFT_DIR=tests
     - name: Make directory
-      run: mkdir $SWIFT_DIR
+      run: mkdir tests
     - name: Download Swift
-      run: curl hhttps://swift.org/builds/swift-4.2.1-release/ubuntu1804/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C $SWIFT_DIR &> /dev/null
+      run: curl https://swift.org/builds/swift-4.2.1-release/ubuntu1804/swift-4.2.1-RELEASE/swift-4.2.1-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C tests &> /dev/null
     - name: Update apt
       run: sudo apt-get update
     - name: Install clang and libicu
