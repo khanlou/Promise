@@ -24,17 +24,15 @@ jobs:
       uses: actions/checkout@master
     - name: Make directory
       run: mkdir tests
-    - name: Download Swift
+    - name: Download and Install Swift
       run: curl https://swift.org/builds/swift-5.0.2-release/ubuntu1804/swift-5.0.2-RELEASE/swift-5.0.2-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C tests &> /dev/null
     - name: Update apt
       run: sudo apt-get update
     - name: Install clang and libicu
       run: sudo apt-get install clang libicu-dev
-    - name: Process Info
-      run: ps
     - name: Alias Swift
       run: alias swift='./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift'
     - name: Swift Version
-      run: swift --version
+      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift --version
     - name: Test
       run: swift test
