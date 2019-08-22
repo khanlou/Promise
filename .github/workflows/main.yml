@@ -30,6 +30,10 @@ jobs:
       run: sudo apt-get update
     - name: Install clang and libicu
       run: sudo apt-get install clang libicu-dev
+    - name: Print Swift contents
+      run: ls -la tests
+    - name: Print Swift usr/bin
+      run: ls -la tests/$SWIFT_VERSION-ubuntu18.04/usr/bin
     - name: Export path
       run: export PATH=$(pwd)/tests/$SWIFT_VERSION-ubuntu18.04/usr/bin:"${PATH}"
     - name: Test
