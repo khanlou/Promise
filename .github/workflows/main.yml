@@ -1,4 +1,4 @@
-name: Build & Run Tests
+name: CI
 
 on:
   pull_request:
@@ -6,8 +6,8 @@ on:
     - master
 
 jobs:
-  test:
-    name: Run Tests
+  mac:
+    name: Mac
     runs-on: macOS-10.14
     steps:
     - name: Checkout
@@ -16,3 +16,19 @@ jobs:
       run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
     - name: Test
       run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone X,OS=12.4'
+  linux:
+    name: Linux
+    runs-on: ubuntu-18.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Make directory
+      run: mkdir tests
+    - name: Download and Install Swift
+      run: curl https://swift.org/builds/swift-5.0.2-release/ubuntu1804/swift-5.0.2-RELEASE/swift-5.0.2-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C tests &> /dev/null
+    - name: Update apt
+      run: sudo apt-get update
+    - name: Install clang and libicu
+      run: sudo apt-get install clang libicu-dev
+    - name: Run Test
+      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift test
