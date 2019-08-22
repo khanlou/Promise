@@ -1,0 +1,18 @@
+name: Build & Run Tests
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: macOS-10.14
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Select Xcode
+      run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+    - name: Test
+      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone X,OS=12.4'
