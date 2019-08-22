@@ -38,7 +38,7 @@ class PromiseAllTests: XCTestCase {
         
         waitForExpectations(timeout: 1, handler: nil)
         guard let array = final.value else { XCTFail(); return }
-        XCTAssertEqual(array, [1, 2, 3, 5])
+        XCTAssertEqual(array, [1, 2, 3, 4])
         XCTAssert(final.isFulfilled)
     }
     
