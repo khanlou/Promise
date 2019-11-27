@@ -13,6 +13,14 @@ import Foundation
 
 struct PromiseCheckError: Error { }
 
+public struct GeneralError: Error {
+    public let message: String
+
+    public init(_ message: String) {
+        self.message = message
+    }
+}
+
 public enum Promises {
     /// Wait for all the promises you give it to fulfill, and once they have, fulfill itself
     /// with the array of all fulfilled values.
@@ -184,6 +192,20 @@ extension Promise {
             if let castedError = error as? E {
                 onRejected(castedError)
             }
+        })
+    }
+
+    public convenience init(errorMessage: String) {
+        self.init(error: GeneralError(errorMessage))
+    }
+    
+    public func reject(errorMessage: String) {
+        self.reject(GeneralError(errorMessage))
+    }
+
+    public func mapError(on queue: ExecutionContext = DispatchQueue.main, _ transformError: @escaping (Error) -> Error) -> Promise {
+        return Promise(work: { (fulfill, reject) in
+            self.then(on: queue, fulfill, { reject(transformError($0)) })
         })
     }
 }

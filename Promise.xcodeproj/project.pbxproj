@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00C2D985238F100500C42EF9 /* PromiseErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00C2D984238F100500C42EF9 /* PromiseErrorTests.swift */; };
 		1A0073681E2865CC00EB319A /* ExecutionContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */; };
 		1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */; };
 		1A2A8CF81D5D58A800421E3E /* PromiseRaceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2A8CF71D5D58A800421E3E /* PromiseRaceTests.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		00C2D984238F100500C42EF9 /* PromiseErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromiseErrorTests.swift; sourceTree = "<group>"; };
 		1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExecutionContextTests.swift; sourceTree = "<group>"; };
 		1A2A8CF51D5D36C500421E3E /* PromiseDelayTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseDelayTests.swift; sourceTree = "<group>"; };
 		1A2A8CF71D5D58A800421E3E /* PromiseRaceTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseRaceTests.swift; sourceTree = "<group>"; };
@@ -163,6 +165,7 @@
 				1A0073671E2865CC00EB319A /* ExecutionContextTests.swift */,
 				1A42330B1F6ECC250045B066 /* PromiseKickoffTests.swift */,
 				34C9479F2218B4C9009D1611 /* PromiseErrorMatcherTests.swift */,
+				00C2D984238F100500C42EF9 /* PromiseErrorTests.swift */,
 			);
 			path = PromiseTests;
 			sourceTree = "<group>";
@@ -413,6 +416,7 @@
 				1A42330C1F6ECC250045B066 /* PromiseKickoffTests.swift in Sources */,
 				1A2A8CF61D5D36C500421E3E /* PromiseDelayTests.swift in Sources */,
 				1A7CC22F1DF4D37400929E7C /* PromiseEnsureTests.swift in Sources */,
+				00C2D985238F100500C42EF9 /* PromiseErrorTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
