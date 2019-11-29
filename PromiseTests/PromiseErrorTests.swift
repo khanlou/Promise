@@ -9,7 +9,7 @@ final class PromiseErrorTests: XCTestCase {
         var error: WrenchError?
         p.mapError { (e) -> Error in
             return WrenchError(message: "Changed")
-        }.catch { (caughtError: WrenchError) in
+        }.catch(type: WrenchError.self) { caughtError in
             error = caughtError
         }.always {
             e.fulfill()
@@ -19,6 +19,6 @@ final class PromiseErrorTests: XCTestCase {
 
         waitForExpectations(timeout: 1, handler: nil)
 
-        XCTAssertEqual(error.message, "Changed")
+        XCTAssertEqual(error?.message, "Changed")
     }
 }
