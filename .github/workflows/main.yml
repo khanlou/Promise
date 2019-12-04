@@ -13,9 +13,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@master
     - name: Select Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_10.3.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_11.2.1.app/Contents/Developer
     - name: Test
-      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone X,OS=12.4'
+      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.2.2'
   linux:
     name: Linux
     runs-on: ubuntu-18.04
