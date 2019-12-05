@@ -14,4 +14,6 @@ XCTMain([
     testCase(PromiseTests.allTests),
     testCase(PromiseThrowsTests.allTests),
     testCase(PromiseZipTests.allTests),
+    testCase(PromiseErrorMatcherTests.allTests),
+    testCase(PromiseErrorTests.allTests),
 ])

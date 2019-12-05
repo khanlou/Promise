@@ -55,4 +55,10 @@ final class PromiseErrorTests: XCTestCase {
 
         XCTAssertEqual(error?.message, "Original")
     }
+
+    static let allTests = [
+        ("testMapErrorChangesError", testMapErrorChangesError),
+        ("testTypedMapErrorChangesError", testTypedMapErrorChangesError),
+        ("testTypedMapErrorDoesntChangeErrorsOfUnspecifiedType", testTypedMapErrorDoesntChangeErrorsOfUnspecifiedType),
+        ]
 }
