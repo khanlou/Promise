@@ -11,7 +11,9 @@ final class PromiseErrorTests: XCTestCase {
             return WrenchError(message: "Changed")
         }.catch(type: WrenchError.self) { caughtError in
             error = caughtError
-        }.always(e.fulfill)
+        }.always{
+            e.fulfill()
+        }
 
         p.reject(WrenchError(message: "Original"))
 
@@ -29,7 +31,9 @@ final class PromiseErrorTests: XCTestCase {
             return WrenchError(message: "Changed")
         }.catch(type: WrenchError.self) { caughtError in
             error = caughtError
-        }.always(e.fulfill)
+        }.always{
+            e.fulfill()
+        }
 
         p.reject(PromiseCheckError())
 
@@ -47,7 +51,9 @@ final class PromiseErrorTests: XCTestCase {
             return WrenchError(message: "Changed")
         }.catch(type: WrenchError.self) { caughtError in
             error = caughtError
-        }.always(e.fulfill)
+        }.always{
+            e.fulfill()
+        }
 
         p.reject(WrenchError(message: "Original"))
 
