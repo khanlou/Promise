@@ -149,13 +149,13 @@ extension Promise {
         })
     }
 
-    public func recover(_ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
-        return recover(type: Error.self, recovery)
+    public func recover(on queue: ExecutionContext = DispatchQueue.main, _ recovery: @escaping (Error) throws -> Promise<Value>) -> Promise<Value> {
+        return recover(type: Error.self, on: queue, recovery)
     }
 
-    public func recover<E: Error>(type errorType: E.Type, _ recovery: @escaping (E) throws -> Promise<Value>) -> Promise<Value> {
+    public func recover<E: Error>(type errorType: E.Type, on queue: ExecutionContext = DispatchQueue.main, _ recovery: @escaping (E) throws -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
-            self.then(fulfill).catch({ anyError in
+            self.then(fulfill).catch(on: queue, { anyError in
                 guard let error = anyError as? E else {
                     reject(anyError)
                     return
@@ -184,6 +184,16 @@ extension Promise {
             if let castedError = error as? E {
                 onRejected(castedError)
             }
+        })
+    }
+
+    public func mapError(on queue: ExecutionContext = DispatchQueue.main, _ transformError: @escaping (Error) -> Error) -> Promise {
+        return self.mapError(type: Error.self, on: queue, transformError)
+    }
+
+    public func mapError<E: Error>(type errorType: E.Type, on queue: ExecutionContext = DispatchQueue.main, _ transformError: @escaping (E) -> Error) -> Promise {
+        return self.recover(type: errorType, on: queue, { (error) -> Promise<Value> in
+            return Promise(error: transformError(error))
         })
     }
 }
