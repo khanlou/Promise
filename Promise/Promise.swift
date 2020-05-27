@@ -156,7 +156,7 @@ public final class Promise<Value> {
     /// of work to be performed, and allows that closure to either fulfill
     /// or reject the promise.
     /// - Parameters:
-    ///   - queue: Optional; queue to perform the work on. Defualts to the
+    ///   - queue: Optional; queue to perform the work on. Defaults to the
     ///            global queue with the `.userInitiated` quality of service.
     ///   - work: Work to be performed. If the work is succesful, pass the
     ///           result to `fulfill()` closure. If the work fails, pass the
