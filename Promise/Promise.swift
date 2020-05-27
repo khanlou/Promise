@@ -135,7 +135,7 @@ public final class Promise<Value> {
     private var state: State<Value>
     private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
     
-    /// Creates a Promise.
+    /// Creates a Promise in the pending state which can be fulfilled or rejected.
     public init() {
         state = .pending(callbacks: [])
     }
