@@ -21,8 +21,9 @@ public enum Promises {
     /// - Returns: A Promise that is completed when all of the input promises finish.
     ///
     /// Note that `race()` is different to `all()` because `race()` will
-    /// blindly take the first promise to complete and returns that promise,
-    /// where `all()` will wait for every promise to complete and return all of them.
+    /// take the first promise to complete and returns that promise's results,
+    /// where `all()` will wait for every promise to complete and return all of the
+    /// results or the first failure. Fails if any of the input promises fail.
     public static func all<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
         return Promise<[T]>(work: { fulfill, reject in
             guard !promises.isEmpty else { fulfill([]); return }
@@ -66,7 +67,7 @@ public enum Promises {
     ///            the first of `promises` that completes.
     ///
     /// Note that `race()` is different to `all()` because `race()` will
-    /// blindly take the first promise to complete and returns that promise,
+    /// take the first promise to complete and returns that promise's result,
     /// where `all()` will wait for every promise to complete and return all of them.
     public static func race<T>(_ promises: [Promise<T>]) -> Promise<T> {
         return Promise<T>(work: { fulfill, reject in
@@ -77,9 +78,9 @@ public enum Promises {
         })
     }
     
-    /// Retries a promise for the given amount of times, after the given delay. If the
+    /// Retries a promise the given amount of times, after the given delay. If the
     /// given promise does not complete after `count` retries, then the rejection is
-    /// allowed to pass through.
+    /// passed through.
     ///
     /// - Parameters:
     ///   - count: The amount of times to retry the given promise
