@@ -49,7 +49,7 @@ public enum Promises {
         })
     }
 
-    /// A promise will be rejected after a delay.
+    /// A promise that will be rejected after a delay.
     /// - Parameter timeout: The amount of time to wait, in seconds, before the rejection.
     /// - Returns: A Promise that is rejected after `timeout` seconds.
     public static func timeout<T>(_ timeout: TimeInterval) -> Promise<T> {
@@ -60,7 +60,7 @@ public enum Promises {
         })
     }
 
-    /// Fulfills or rejects with the first promise that completes.
+    /// Fulfills or rejects with the first of the input promises that completes.
     /// - Parameter promises: Promises to race
     /// - Returns: A `Promise<T>` that will be fulfilled or rejected with
     ///            the first of `promises` that completes.
@@ -101,7 +101,8 @@ public enum Promises {
     }
     
     /// Runs a block of code that creates a `Promise` but which can also `throw`.
-    /// - Parameter block: Code to generate a `Promise`; `throw`s are rejected as expcted.
+    /// Useful when setting up a promise with code that needs to throw.
+    /// - Parameter block: Code to generate a `Promise`; `throw`ing creates a rejected promise with the thrown error.
     /// - Returns: `Promise<T>` that is created from the given block
     public static func kickoff<T>(_ block: @escaping () throws -> Promise<T>) -> Promise<T> {
         return Promise(value: ()).then(block)
@@ -118,7 +119,8 @@ public enum Promises {
         }
     }
     
-    /// Pairs two promises such that the results are paired together.
+    /// Pairs two promises and returns a promise with the results paired together.
+    /// Fails if either fails.
     /// - Parameters:
     ///   - first: First promise to pair
     ///   - second: Second promise to pair
