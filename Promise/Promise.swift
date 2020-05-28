@@ -135,18 +135,41 @@ public final class Promise<Value> {
     private var state: State<Value>
     private let lockQueue = DispatchQueue(label: "promise_lock_queue", qos: .userInitiated)
     
+    /// Creates a Promise in the pending state which can be fulfilled or rejected.
     public init() {
         state = .pending(callbacks: [])
     }
     
+    /// Creates a Promise that is immediately fulfilled.
+    /// - Parameter value: Result of this Promise
     public init(value: Value) {
         state = .fulfilled(value: value)
     }
     
+    /// Creates a Promise that is immediately rejected.
+    /// - Parameter error: Result of this Promise
     public init(error: Error) {
         state = .rejected(error: error)
     }
     
+    /// Typical Promise intializer. Initializes this Promise with a block
+    /// of work to be performed, and allows that closure to either fulfill
+    /// or reject the promise.
+    /// - Parameters:
+    ///   - queue: Optional; queue to perform the work on. Defaults to the
+    ///            global queue with the `.userInitiated` quality of service.
+    ///   - work: Work to be performed. If the work is succesful, pass the
+    ///           result to `fulfill()` closure. If the work fails, pass the
+    ///           error to `reject()`.
+    ///   - fulfill: Fulfills this promise with the given value.
+    ///   - reject: Rejects this promise with the given error.
+    ///
+    /// Promises are *fulfilled* if they complete successfully with a value
+    /// of the type of the Promise. A `Promise<String>` is *fulfilled* if it
+    /// generates a `String`.
+    ///
+    /// Promises are *rejected* if they fail, and thus, generate an `Error`.
+    /// With this library, any Promise can produce any `Error`
     public convenience init(queue: DispatchQueue = DispatchQueue.global(qos: .userInitiated), work: @escaping (_ fulfill: @escaping (Value) -> Void, _ reject: @escaping (Error) -> Void) throws -> Void) {
         self.init()
         queue.async(execute: {
@@ -158,7 +181,15 @@ public final class Promise<Value> {
         })
     }
 
-    /// - note: This one is "flatMap"
+    ///  Converts the result of this promise to a new value
+    ///  of type `NewValue` by returning a `Promise<NewValue>`
+    ///
+    /// - Parameter queue: Optional; queue to perform the work on.
+    ///                    Defaults to the main queue.
+    /// - Parameter onFulfilled: Transform to perform if this closure fulfills.
+    /// - Returns: `Promise<NewValue>`
+    ///
+    /// This is roughly the equivalent of a traditional `flatMap()`.
     @discardableResult
     public func then<NewValue>(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) throws -> Promise<NewValue>) -> Promise<NewValue> {
         return Promise<NewValue>(work: { fulfill, reject in
@@ -176,7 +207,16 @@ public final class Promise<Value> {
         })
     }
     
-    /// - note: This one is "map"
+    /// Converts the result of this promise to a new value
+    /// of type `NewValue` by returning an instance of `NewValue`.
+    ///
+    /// - Parameters:
+    ///   - queue: Optional; queue to perform the work on.
+    ///            Defaults to the main queue.
+    ///   - onFulfilled: Transform to perform if this closure fulfills.
+    /// - Returns: `Promise<NewValue>`
+    ///
+    /// This is roughly the equivalent of a traditional `map()`.
     @discardableResult
     public func then<NewValue>(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) throws -> NewValue) -> Promise<NewValue> {
         return then(on: queue, { (value) -> Promise<NewValue> in
@@ -188,43 +228,65 @@ public final class Promise<Value> {
         })
     }
     
+    /// Handles the completion of a Promise.
+    /// - Parameters:
+    ///   - queue: Optional; queue to perform this work on.
+    ///            Defaults to the main queue.
+    ///   - onFulfilled: Work to perform if the Promise is fulfilled (completes with a value)
+    ///   - onRejected: Work to perform if the Promise is rejected (completes with an error)
+    /// - Returns: A discardable instance of this promise that can be used for further chaining.
     @discardableResult
     public func then(on queue: ExecutionContext = DispatchQueue.main, _ onFulfilled: @escaping (Value) -> Void, _ onRejected: @escaping (Error) -> Void = { _ in }) -> Promise<Value> {
         addCallbacks(on: queue, onFulfilled: onFulfilled, onRejected: onRejected)
         return self
     }
     
+    /// Catches an error if this promise chain is rejected and performs some work.
+    /// - Parameters:
+    ///   - queue: Optional; queue to perform this work on.
+    ///            Defaults to the main queue.
+    ///   - onRejected: Work to perform if this promise chain is rejected.
+    /// - Returns: A discardable instance of this promise that can be used for further chaining.
     @discardableResult
     public func `catch`(on queue: ExecutionContext = DispatchQueue.main, _ onRejected: @escaping (Error) -> Void) -> Promise<Value> {
         return then(on: queue, { _ in }, onRejected)
     }
     
+    /// Rejects this Promise (completes it with an `Error`).
+    /// - Parameter error: Error to reject with
     public func reject(_ error: Error) {
         updateState(.rejected(error: error))
     }
     
+    /// Fulfills this Promise (completes it succesfully with an instance of `Value`).
+    /// - Parameter value: Instance of `Value` to fulfill with
     public func fulfill(_ value: Value) {
         updateState(.fulfilled(value: value))
     }
     
+    /// A flag indicating if the promise is still pending.
     public var isPending: Bool {
         return !isFulfilled && !isRejected
     }
     
+    /// A flag indicating if the promise is fulfilled (completed successfully).
     public var isFulfilled: Bool {
         return value != nil
     }
     
+    /// A flag indicating if the promise is rejected (completed with failure).
     public var isRejected: Bool {
         return error != nil
     }
     
+    /// The value that the promise was fulfilled with, if it was fulfilled. `nil` otherwise.
     public var value: Value? {
         return lockQueue.sync(execute: {
             return self.state.value
         })
     }
     
+    /// The `Error` that the promise was rejected with, if it was rejected. `nil` otherwise.
     public var error: Error? {
         return lockQueue.sync(execute: {
             return self.state.error
