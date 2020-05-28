@@ -109,8 +109,10 @@ public enum Promises {
         return Promise(value: ()).then(block)
     }
 
-    /// Allows for a block of code that could `throw` to be executed and turned into a `Promise`.
-    /// - Parameter block: Code to be executed; `throw`s are rejected as expected.
+    /// Runs a block of code that returns a value but which can also `throw`.
+    /// Useful when setting up a promise with code that needs to throw.
+    /// - Parameter block: Code to generate a value that will be wrapped in the promise;
+    ///   `throw`ing creates a rejected promise with the thrown error.
     /// - Returns: `Promise<T>` that executes the given block, and rejects if necessary.
     public static func kickoff<T>(_ block: @escaping () throws -> T) -> Promise<T> {
         do {
