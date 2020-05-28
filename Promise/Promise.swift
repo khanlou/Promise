@@ -264,29 +264,29 @@ public final class Promise<Value> {
         updateState(.fulfilled(value: value))
     }
     
-    /// Gets a flag indicating if this promise is still pending.
+    /// A flag indicating if the promise is still pending.
     public var isPending: Bool {
         return !isFulfilled && !isRejected
     }
     
-    /// Gets a flag indicating if this promise is fulfilled (completed successfully).
+    /// A flag indicating if the promise is fulfilled (completed successfully).
     public var isFulfilled: Bool {
         return value != nil
     }
     
-    /// Gets a flag indicating if this promise is rejected (completed with failure).
+    /// A flag indicating if the promise is rejected (completed with failure).
     public var isRejected: Bool {
         return error != nil
     }
     
-    /// Gets the value this promise was fulfilled with, if it was fulfilled. `nil` otherwise.
+    /// The value that the promise was fulfilled with, if it was fulfilled. `nil` otherwise.
     public var value: Value? {
         return lockQueue.sync(execute: {
             return self.state.value
         })
     }
     
-    /// Gets the `Error` this promise was rejected with, if it was rejected. `nil` otherwise.
+    /// The `Error` that the promise was rejected with, if it was rejected. `nil` otherwise.
     public var error: Error? {
         return lockQueue.sync(execute: {
             return self.state.error
