@@ -60,6 +60,50 @@ class PromiseRetryTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
         XCTAssert(promise.isRejected)
     }
+    
+    func testRetryWithShouldRetryClosureSuccess() {
+        weak var expectation = self.expectation(description: "`Promise.retry` should retry and eventually succeed.")
+        
+        let shouldRetry: ((Error) -> Bool) = { error in
+            return true
+        }
+        var currentCount = 3
+        let promise = Promises.retry(count: 3, delay: 0, shouldRetry: shouldRetry, generate: { () -> Promise<Int> in
+            if currentCount == 1 {
+                return Promise(value: 8)
+            }
+            currentCount -= 1
+            return Promise(error: SimpleError())
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertEqual(promise.value, 8)
+        XCTAssert(promise.isFulfilled)
+    }
+    
+    func testRetryWithShouldRetryClosureFailure() {
+        weak var expectation = self.expectation(description: "`Promise.retry` should retry and eventually succeed.")
+        
+        let shouldRetry: ((Error) -> Bool) = { error in
+            return false
+        }
+        var currentCount = 3
+        let promise = Promises.retry(count: 3, delay: 0, shouldRetry: shouldRetry, generate: { () -> Promise<Int> in
+            if currentCount == 1 {
+                return Promise(value: 8)
+            }
+            currentCount -= 1
+            return Promise(error: SimpleError())
+        }).always({
+            expectation?.fulfill()
+        })
+        
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertEqual(currentCount, 2)
+        XCTAssert(promise.isRejected)
+    }
 
     static let allTests = [
         ("testRetry", testRetry),

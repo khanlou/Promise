@@ -85,17 +85,21 @@ public enum Promises {
     /// - Parameters:
     ///   - count: The amount of times to retry the given promise
     ///   - delay: How much time, in seconds, between each attempt
+    ///   - shouldRetry: Optional closure to indicate if the error should be tried. If nil, it will be retried.
     ///   - generate: Closure to generate the `Promise<T>`
     /// - Returns: A promise that will retry itself, after the given delay, until the
     ///            given promise is fulfilled or the maximum count is reached.
-    public static func retry<T>(count: Int, delay: TimeInterval, generate: @escaping () -> Promise<T>) -> Promise<T> {
+    public static func retry<T>(count: Int, delay: TimeInterval, shouldRetry: ((Error) -> Bool)? = nil, generate: @escaping () -> Promise<T>) -> Promise<T> {
         if count <= 0 {
             return generate()
         }
         return Promise<T>(work: { fulfill, reject in
             generate().recover({ error in
+                guard shouldRetry?(error) ?? true else {
+                    throw error
+                }
                 return self.delay(delay).then({
-                    return retry(count: count-1, delay: delay, generate: generate)
+                    return retry(count: count-1, delay: delay, shouldRetry: shouldRetry, generate: generate)
                 })
             }).then(fulfill).catch(reject)
         })
