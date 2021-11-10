@@ -233,14 +233,14 @@ extension Promise {
     /// - Returns: A discardable instance of this promise that can be used for further chaining.
     public func recover<E: Error>(type errorType: E.Type, on queue: ExecutionContext = DispatchQueue.main, _ recovery: @escaping (E) throws -> Promise<Value>) -> Promise<Value> {
         return Promise(work: { fulfill, reject in
-            self.then(fulfill).catch(on: queue, { anyError in
+            self.then(on: queue, fulfill).catch(on: queue, { anyError in
                 guard let error = anyError as? E else {
                     reject(anyError)
                     return
                 }
 
                 do {
-                    try recovery(error).then(fulfill, reject)
+                    try recovery(error).then(on: queue, fulfill, reject)
                 } catch (let error) {
                     reject(error)
                 }

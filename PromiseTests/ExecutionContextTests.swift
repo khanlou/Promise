@@ -131,6 +131,29 @@ class ExecutionContextTests: XCTestCase {
         
     }
 
+    func testRecoverOnQueueDoesNotUseMainQueue() {
+        weak var expectation = self.expectation(description: "Should not use the main queue when recovering on a given queue")
+        let backgroundQueue = DispatchQueue(label: "testqueue")
+        let semaphore = DispatchSemaphore(value: 0)
+
+        // Block any future use of main queue until the promise chain completes.
+        // This ensures the main queue is not used during the processing of the promise itself.
+        DispatchQueue.main.async {
+            if semaphore.wait(timeout: .now() + 1) == .success {
+                expectation?.fulfill()
+            }
+        }
+
+        Promise(error: SimpleError())
+            .recover(on: backgroundQueue) { error in
+                return Promise(value: ())
+            }
+            .then(on: backgroundQueue) {
+                semaphore.signal()
+            }
+
+        self.waitForExpectations(timeout: 2, handler: nil)
+    }
 
     static let allTests = [
         ("testThreads", testThreads),
@@ -139,5 +162,6 @@ class ExecutionContextTests: XCTestCase {
         ("testInvalidatedInvalidatableQueue", testInvalidatedInvalidatableQueue),
         ("testTapContinuesToFireInvalidatableQueue", testTapContinuesToFireInvalidatableQueue),
         ("testInvalidatableQueueSupportsNonMainQueues", testInvalidatableQueueSupportsNonMainQueues),
+        ("testRecoverOnQueueDoesNotUseMainQueue", testRecoverOnQueueDoesNotUseMainQueue),
     ]
 }
