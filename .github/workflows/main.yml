@@ -31,4 +31,4 @@ jobs:
     - name: Install clang and libicu
       run: sudo apt-get install clang libicu-dev
     - name: Run Test
-      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift test
+      run: ./tests/swift-5.5.1-RELEASE-ubuntu18.04/usr/bin/swift test
