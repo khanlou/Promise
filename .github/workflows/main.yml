@@ -15,7 +15,7 @@ jobs:
     - name: Select Xcode
       run: sudo xcode-select --switch /Applications/Xcode_13.1.app/Contents/Developer
     - name: Test
-      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.2'
+      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0'
   linux:
     name: Linux
     runs-on: ubuntu-18.04
