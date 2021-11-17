@@ -298,6 +298,25 @@ extension Promise {
     }
 }
 
+@available(macOS 12.0.0, iOS 15, watchOS 7, *)
+public extension Promise {
+    /// Awaits the value in the promise or an error.
+    /// - Parameters:
+    ///   - queue: Optional; queue to await on.
+    ///            Defaults to the main queue.
+    /// - Returns: The promise's value or an error.
+    func wait(on queue: DispatchQueue = DispatchQueue.main) async throws -> Value {
+        try await withCheckedThrowingContinuation { continuation in
+            self.then(on: queue) { value in
+                continuation.resume(with: .success(value))
+            }.catch(on: queue) { error in
+                continuation.resume(with: .failure(error))
+            }
+        }
+    }
+}
+
+
 #if !swift(>=4.1)
     internal extension Sequence {
         func compactMap<T>(_ fn: (Element) throws -> T?) rethrows -> [T] {
