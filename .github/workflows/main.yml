@@ -8,14 +8,14 @@ on:
 jobs:
   mac:
     name: Mac
-    runs-on: macOS-latest
+    runs-on: macOS-11
     steps:
     - name: Checkout
       uses: actions/checkout@master
     - name: Select Xcode
-      run: sudo xcode-select --switch /Applications/Xcode_11.2.1.app/Contents/Developer
+      run: sudo xcode-select --switch /Applications/Xcode_13.1.app/Contents/Developer
     - name: Test
-      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone 11,OS=13.2.2'
+      run: xcodebuild clean test -scheme "Promise" -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0'
   linux:
     name: Linux
     runs-on: ubuntu-18.04
@@ -25,10 +25,10 @@ jobs:
     - name: Make directory
       run: mkdir tests
     - name: Download and Install Swift
-      run: curl https://swift.org/builds/swift-5.0.2-release/ubuntu1804/swift-5.0.2-RELEASE/swift-5.0.2-RELEASE-ubuntu18.04.tar.gz -s -L | tar xz -C tests &> /dev/null
+      run: curl https://download.swift.org/swift-5.5.1-release/ubuntu1804/swift-5.5.1-RELEASE/swift-5.5.1-RELEASE-ubuntu18.04.tar.gz -s -L | tar xz -C tests &> /dev/null
     - name: Update apt
       run: sudo apt-get update
     - name: Install clang and libicu
       run: sudo apt-get install clang libicu-dev
     - name: Run Test
-      run: ./tests/swift-5.0.2-RELEASE-ubuntu18.04/usr/bin/swift test
+      run: ./tests/swift-5.5.1-RELEASE-ubuntu18.04/usr/bin/swift test
