@@ -8,7 +8,7 @@ on:
 jobs:
   mac:
     name: Mac
-    runs-on: macOS-10.14
+    runs-on: macOS-latest
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -25,7 +25,7 @@ jobs:
     - name: Make directory
       run: mkdir tests
     - name: Download and Install Swift
-      run: curl https://swift.org/builds/swift-5.0.2-release/ubuntu1804/swift-5.0.2-RELEASE/swift-5.0.2-RELEASE-ubuntu18.04.tar.gz -s | tar xz -C tests &> /dev/null
+      run: curl https://swift.org/builds/swift-5.0.2-release/ubuntu1804/swift-5.0.2-RELEASE/swift-5.0.2-RELEASE-ubuntu18.04.tar.gz -s -L | tar xz -C tests &> /dev/null
     - name: Update apt
       run: sudo apt-get update
     - name: Install clang and libicu
